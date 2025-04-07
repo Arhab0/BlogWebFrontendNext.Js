@@ -1,0 +1,22 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  border: 1px solid #DFDFDF;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 4px 0;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
+}
+
+.input:disabled {
+  color: #858585;
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}

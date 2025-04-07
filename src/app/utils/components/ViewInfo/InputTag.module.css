@@ -1,0 +1,26 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 4px 0;
+  background-color: #0376A7;
+  color: #fff;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+/* Firefox */
+.input[type="number"] {
+  -moz-appearance: textfield !important;
+}

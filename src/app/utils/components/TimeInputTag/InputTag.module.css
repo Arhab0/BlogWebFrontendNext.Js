@@ -1,0 +1,63 @@
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e1e1e;
+  font-family: "Alata", sans-serif;
+}
+
+.required {
+  color: #e63946;
+}
+
+.inputContainer {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #dfdfdf;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  outline: none;
+  height: 40px;
+  /* text-align: center; */
+}
+
+/* Focus effect for input */
+.input:focus {
+  border-color: #2159ad;
+  box-shadow: 0 0 6px rgba(33, 89, 173, 0.5);
+}
+
+/* Disabled styling */
+.input:disabled {
+  color: #858585;
+  background-color: #f3f3f3;
+  cursor: not-allowed;
+}
+
+/* Custom styling for selected time background */
+.input::-webkit-datetime-edit {
+  padding: 4px;
+}
+
+/* .input::-webkit-datetime-edit-hour-field,
+.input::-webkit-datetime-edit-minute-field,
+.input::-webkit-datetime-edit-ampm-field {
+  background-color: #2159ad;
+  color: white !important;
+  border-radius: 4px;
+  padding: 4px;
+} */

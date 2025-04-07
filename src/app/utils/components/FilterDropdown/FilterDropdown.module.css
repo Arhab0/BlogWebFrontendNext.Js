@@ -1,0 +1,41 @@
+.dropdownContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownContent label {
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  border: 1px solid #dde8ff;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 14px;
+  background: #f6f8fc;
+  font-weight: 300;
+  margin: 4px 0;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  z-index: 1;
+}
+.option {
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+.noResults {
+  padding: 8px;
+  color: #888;
+}
