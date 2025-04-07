@@ -7,21 +7,35 @@ import useHelper from "../../../../../../Helper/helper";
 const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState({ isError: false, Message: "" });
+  // const [error, setError] = useState({ isError: false, Message: "" });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
   const helper = useHelper();
   const [obj, setObj] = useState({ email: "", password: "" });
 
   function Submit() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!obj.email.trim() || !obj.password.trim()) {
-      setError({ isError: true, Message: "All fields are required" });
+    const newErrors = { email: "", password: "" };
+
+    if (!obj.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(obj.email)) {
+      newErrors.email = "Email is not valid";
+    }
+
+    if (!obj.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+
+    if (newErrors.email || newErrors.password) {
+      setErrors(newErrors);
       return;
     }
 
-    if (!emailRegex.test(obj.email)) {
-      setError({ isError: true, Message: "Email is not valid" });
-      return;
-    }
+    setErrors({ email: "", password: "" });
     setLoading(true);
     helper.xhr
       .Post(
@@ -29,15 +43,11 @@ const Login = () => {
         helper.ConvertToFormData({ email: obj.email, password: obj.password })
       )
       .then((res) => {
-        // helper.storeData("token", res.token);
-        // helper.storeData("UserName", res.UserName);
-        // helper.storeData("FullName", res.FullName);
-        // helper.storeData("RoleName", res.RoleName);
         // router.push("/Home");
       })
       .catch((err) => {
         console.log(err);
-        setError({ isError: true, Message: "User not found!" });
+        setErrors((prev) => ({ ...prev, password: "User not found!" }));
       })
       .finally(() => {
         setLoading(false);
@@ -46,88 +56,72 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
-      <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
+      <div className="flex-1 text-center hidden lg:flex items-center justify-center" style={{background:" radial-gradient(#6cb6eb, #2734c5)"}}>
         <div
-          className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url("/assets/loginPageImage.webp")`,
-          }}
-        ></div>
+          className="w-[60%] bg-contain bg-center bg-no-repeat h-[80%]"
+          style={{ backgroundImage: "url('/assets/LoginPagePhoto.png')" }}
+        />
       </div>
+
       <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12 flex items-center justify-center">
-        <div className="flex flex-col items-center justify-center w-full">
-          <h1 className="text-5xl xl:text-4xl font-medium">Login</h1>
+        <div className="flex flex-col items-center w-full">
+          <h4 className="text-4xl xl:text-2xl font-medium">Login</h4>
+
           <div className="w-full flex-1 mt-8">
-            <div className="mx-auto max-w-xs">
+            <div className="mx-auto">
               <div className="relative mt-6">
+                <label className="text-sm text-gray-800">Email</label>
                 <input
                   type="email"
-                  name="email"
                   id="email"
+                  name="email"
                   value={obj.email}
-                  onChange={(e) => {
-                    setObj({ ...obj, email: e.target.value });
-                  }}
-                  placeholder="Email Address"
-                  className="peer mt-2 w-full bg-transparent border-b-2  border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none"
+                  onChange={(e) => setObj({ ...obj, email: e.target.value })}
+                  className={`peer w-full mt-2 bg-[#f7f7f7] p-3 rounded-md border ${
+                    errors.email && "border-red-500"
+                  } focus:outline-none`}
                 />
-                <label
-                  htmlFor="email"
-                  className="pointer-events-none absolute top-0 left-0 origin-left -translate-y-1/2 bg-transparent transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800"
-                >
-                  Email Address
-                </label>
+                {errors.email && (
+                  <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+                )}
               </div>
+
               <div className="relative mt-6">
+                <label className="text-sm text-gray-800">Password</label>
                 <input
                   type="password"
-                  name="password"
                   id="password"
+                  name="password"
                   value={obj.password}
-                  onChange={(e) => {
-                    setObj({ ...obj, password: e.target.value });
-                  }}
-                  placeholder="Password"
-                  className="peer peer mt-2 w-full bg-transparent border-b-2  border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none"
+                  onChange={(e) => setObj({ ...obj, password: e.target.value })}
+                  className={`peer w-full mt-2 bg-[#f7f7f7] p-3 rounded-md border ${
+                    errors.password && "border-red-500"
+                  } focus:outline-none`}
                 />
-                <label
-                  htmlFor="password"
-                  className="pointer-events-none absolute top-0 left-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800"
-                >
-                  Password
-                </label>
+                {errors.password && (
+                  <p className="text-xs text-red-500 mt-1">{errors.password}</p>
+                )}
+
+                {/* Forgot Password Link */}
+                <div className="flex justify-end mt-1">
+                  <p className="text-sm text-blue-500 hover:cursor-pointer">
+                    Forgot Password?
+                  </p>
+                </div>
               </div>
-              {error.isError && (
-                <p className="text-xs text-red-900 text-start">
-                  {error.Message}
-                </p>
-              )}
-              <p className="font-normal text-red-500 text-end text-sm mt-1">
-                <span className="hover:cursor-pointer">Forgot Password?</span>
-              </p>
-              <div className="flex items-center justify-center flex-col mt-8">
+
+              <div className="items-center flex-col mt-8 flex">
                 <button
-                  className={`relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+                  onClick={Submit}
+                  className="relative inline-flex items-center justify-center w-1/2 p-0.5 mb-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
                 >
-                  <span
-                    className={`relative px-8 py-2 rounded-md transition-all items-center ease-in duration-75 ${
-                      loading
-                        ? "bg-transparent text-white"
-                        : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
-                    }`}
-                    onClick={Submit}
-                  >
-                    {loading ? <BladeLoader /> : "Login"}
+                  <span className="relative px-8 py-2 w-full text-center rounded-md bg-white text-black group-hover:bg-transparent group-hover:text-white transition-all duration-75">
+                    Login
                   </span>
                 </button>
 
-                <p
-                  className="text-sm text-gray-500 hover:cursor-pointer hover:text-blue-700"
-                  onClick={() => {
-                    router.push("/Signup");
-                  }}
-                >
-                  Didn't have account? Register here
+                <p className="text-sm text-gray-500 hover:cursor-pointer hover:text-blue-700 mt-2" onClick={()=>{router.push("/Signup")}}>
+                  Didn’t have an account? Register here
                 </p>
               </div>
             </div>
