@@ -37,26 +37,29 @@ const Login = () => {
 
     setErrors({ email: "", password: "" });
     setLoading(true);
-    helper.xhr
-      .Post(
-        "/Auth/Login",
-        helper.ConvertToFormData({ email: obj.email, password: obj.password })
-      )
-      .then((res) => {
-        // router.push("/Home");
-      })
-      .catch((err) => {
-        console.log(err);
-        setErrors((prev) => ({ ...prev, password: "User not found!" }));
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    // helper.xhr
+    //   .Post(
+    //     "/Auth/Login",
+    //     helper.ConvertToFormData({ email: obj.email, password: obj.password })
+    //   )
+    //   .then((res) => {
+    //     // router.push("/Home");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setErrors((prev) => ({ ...prev, password: "User not found!" }));
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   }
 
   return (
     <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
-      <div className="flex-1 text-center hidden lg:flex items-center justify-center" style={{background:" radial-gradient(#6cb6eb, #2734c5)"}}>
+      <div
+        className="flex-1 text-center hidden lg:flex items-center justify-center"
+        style={{ background: " radial-gradient(#6cb6eb, #2734c5)" }}
+      >
         <div
           className="w-[60%] bg-contain bg-center bg-no-repeat h-[80%]"
           style={{ backgroundImage: "url('/assets/LoginPagePhoto.png')" }}
@@ -112,15 +115,26 @@ const Login = () => {
 
               <div className="items-center flex-col mt-8 flex">
                 <button
-                  onClick={Submit}
-                  className="relative inline-flex items-center justify-center w-1/2 p-0.5 mb-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
+                  className={`relative inline-flex items-center w-1/2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
                 >
-                  <span className="relative px-8 py-2 w-full text-center rounded-md bg-white text-black group-hover:bg-transparent group-hover:text-white transition-all duration-75">
-                    Login
+                  <span
+                    className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
+                      loading
+                        ? "bg-transparent text-white"
+                        : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
+                    }`}
+                    onClick={Submit}
+                  >
+                    {loading ? <BladeLoader /> : "Login"}
                   </span>
                 </button>
 
-                <p className="text-sm text-gray-500 hover:cursor-pointer hover:text-blue-700 mt-2" onClick={()=>{router.push("/Signup")}}>
+                <p
+                  className="text-sm text-gray-500 hover:cursor-pointer hover:text-blue-700 mt-2"
+                  onClick={() => {
+                    router.push("/Signup");
+                  }}
+                >
                   Didn’t have an account? Register here
                 </p>
               </div>
