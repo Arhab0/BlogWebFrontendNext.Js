@@ -37,21 +37,22 @@ const Login = () => {
 
     setErrors({ email: "", password: "" });
     setLoading(true);
-    // helper.xhr
-    //   .Post(
-    //     "/Auth/Login",
-    //     helper.ConvertToFormData({ email: obj.email, password: obj.password })
-    //   )
-    //   .then((res) => {
-    //     // router.push("/Home");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setErrors((prev) => ({ ...prev, password: "User not found!" }));
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+    helper.xhr
+      .Post(
+        "/Auth/Login",
+        helper.ConvertToFormData({ email: obj.email, password: obj.password })
+      )
+      .then((res) => {
+        console.log(res);
+        router.push("/Home");
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrors((prev) => ({ ...prev, password: "User not found!" }));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
