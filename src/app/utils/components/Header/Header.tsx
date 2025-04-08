@@ -65,7 +65,7 @@ const Header = () => {
               <>
                 {helper.getData("ProfilePhoto") !== "" ? (
                   <img
-                    src={`${helper.GetImageUrl}/${helper.getData(
+                    src={`${helper.GetUrl}/${helper.getData(
                       "ProfilePhoto"
                     )}`}
                     alt="profile"
@@ -145,7 +145,7 @@ const Header = () => {
               <div className="flex items-center gap-2">
                 {helper.getData("ProfilePhoto") !== "" ? (
                   <img
-                    src={`${helper.GetImageUrl}/${helper.getData(
+                    src={`${helper.GetUrl}/${helper.getData(
                       "ProfilePhoto"
                     )}`}
                     alt="profile"

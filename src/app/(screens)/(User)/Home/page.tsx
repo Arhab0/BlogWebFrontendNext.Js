@@ -116,7 +116,7 @@ const page = () => {
                       }}
                     >
                       <img
-                        src={`${helper.GetImageUrl}/${post.Img}`}
+                        src={`${helper.GetUrl}/${post.Img}`}
                         className="w-full max-w-[430px] mx-auto hover:scale-95 object-cover duration-300 hover:drop-shadow-2xl cursor-pointer h-80 rounded"
                         alt=""
                       />

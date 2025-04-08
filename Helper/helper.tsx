@@ -151,7 +151,7 @@ const useHelper = () => {
     return formData;
   };
 
-  const GetImageUrl = ()=>{
+  const GetUrl = ()=>{
     return API;
   }
 
@@ -247,7 +247,7 @@ const useHelper = () => {
     GetToken,
     removeData,
     GetDocument,
-    GetImageUrl
+    GetUrl
   };
 };
 

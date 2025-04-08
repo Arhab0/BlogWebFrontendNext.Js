@@ -115,7 +115,7 @@ const Login = () => {
 
                 {/* Forgot Password Link */}
                 <div className="flex justify-end mt-1">
-                  <p className="text-sm text-blue-500 hover:cursor-pointer">
+                  <p className="text-sm text-blue-500 hover:cursor-pointer" onClick={()=>{router.push("/ForgotPassword")}}>
                     Forgot Password?
                   </p>
                 </div>

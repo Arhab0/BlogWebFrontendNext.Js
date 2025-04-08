@@ -110,13 +110,13 @@ const page = ({ params }: PageProps) => {
             <div className="md:w-[70%] w-full">
               <img
                 className="w-full md:h-auto rounded-md object-cover"
-                src={`${helper.GetImageUrl}/${post?.postImg}`}
+                src={`${helper.GetUrl}/${post?.postImg}`}
                 alt=""
               />
               <div className="flex items-center gap-4 mt-3">
                 {post?.userPhoto ? (
                   <img
-                  src={`${helper.GetImageUrl}/${post?.userPhoto}`}
+                  src={`${helper.GetUrl}/${post?.userPhoto}`}
                     className="w-10 h-10 rounded-full"
                     alt=""
                   />

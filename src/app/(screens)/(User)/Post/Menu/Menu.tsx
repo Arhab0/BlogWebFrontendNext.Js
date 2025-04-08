@@ -30,7 +30,7 @@ const Menu = ({ Id }: PageProps) => {
       </h1>
       {posts.map((post) => (
         <div key={post.Id} className="md:mb-6 mb-3">
-          <Image src={`${helper.GetImageUrl}/${post.Img}`} className="rounded" alt="" />
+          <Image src={`${helper.GetUrl}/${post.Img}`} className="rounded" alt="" />
           <p
             onClick={() => {
               router.push(`/Post/SinglePost/${post.Id}`);
