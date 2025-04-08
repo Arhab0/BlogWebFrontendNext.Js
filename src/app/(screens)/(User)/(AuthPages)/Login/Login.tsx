@@ -44,6 +44,13 @@ const Login = () => {
       )
       .then((res) => {
         console.log(res);
+        helper.storeData("token", res.token);
+        const fullName = res.user.FirstName+" "+res.user.LastName
+        helper.storeData("email", res.user.email);
+        helper.storeData("userName",fullName);
+        helper.storeData("UserId", res.user.Id);
+        helper.storeData("RoleId", res.user.RoleId);
+        helper.storeData("ProfilePhoto",res.user.ProfilePic)
         router.push("/Home");
       })
       .catch((err) => {

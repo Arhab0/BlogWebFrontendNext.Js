@@ -151,6 +151,10 @@ const useHelper = () => {
     return formData;
   };
 
+  const GetImageUrl = ()=>{
+    return API;
+  }
+
   const xhr = {
     Post: async (endpoint: string, formData: FormData): Promise<any> => {
       // console.clear();
@@ -243,6 +247,7 @@ const useHelper = () => {
     GetToken,
     removeData,
     GetDocument,
+    GetImageUrl
   };
 };
 

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    outline: none !important;
+  }
 .PhoneInputInput {
     outline: none !important;
+}
+.ProseMirror {
+    height: 20rem Im !important;
 }
