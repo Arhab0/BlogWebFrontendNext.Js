@@ -8,6 +8,7 @@ import BladeLoader from "@/app/utils/Loaders/BladeLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/app/utils/components/Header/Header";
+import { useRouter } from "next/navigation";
 
 type PageProps = {
   params: {
@@ -16,6 +17,7 @@ type PageProps = {
 };
 
 const CreatePostPage = ({ params }: PageProps) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const helper = useHelper();
   const [post, setPost] = useState({ Title: "", Description: "", CatId: 0 });
@@ -151,6 +153,7 @@ const CreatePostPage = ({ params }: PageProps) => {
       })
       .finally(() => {
         setLoading(false);
+        router.push("/Home");
       });
   };
 
