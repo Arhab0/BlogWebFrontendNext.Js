@@ -95,13 +95,10 @@ const InitialView = ({ moveForward }: Props) => {
     //   .finally(() => {
     //     setLoading(false);
     //   });
-    fetch(
-      `${helper.GetUrl}/Auth/ForgotPassword?emailAddress=${email}`,
-      {
-        method: "GET",
-        // headers: { Authorization: "Bearer " + helper.getData("token") },
-      }
-    )
+    fetch(`https://localhost:44385/Auth/ForgotPassword?emailAddress=${email}`, {
+      method: "GET",
+      // headers: { Authorization: "Bearer " + helper.getData("token") },
+    })
       .then(async (response: any) => {
         var res = await response.json();
         // console.log(res)

@@ -7,8 +7,12 @@ import DateInputTag from "@/app/utils/components/DateInputTag/DateInputTag";
 import SubmitBtn from "@/app/utils/components/SubmitBtn/SubmitBtn";
 import BladeLoader from "@/app/utils/Loaders/BladeLoader";
 import useHelper from "../../../../../../Helper/helper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [loading, setLoading] = useState(false);
   const helper = useHelper();
@@ -71,23 +75,39 @@ const page = () => {
       setEmailError({ isError: false, Message: "" });
       setError({ isError: false, Message: "" });
 
-
       helper.xhr
         .Post("/Auth/CreateUser", helper.ConvertToFormData({ user, file }))
         .then((res) => {
           console.log(res);
-          // helper.storeData("token", res.token);
-          // helper.storeData("UserName", res.UserName);
-          // helper.storeData("FullName", res.FullName);
-          // helper.storeData("RoleName", res.RoleName);
           // router.push("/Home");
         })
         .catch((err) => {
           console.log(err);
-          setError({ isError: true, Message: "User not found!" });
+          toast.success("Unable to create the ", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          // setError({ isError: true, Message: "User not found!" });
         })
         .finally(() => {
           setLoading(false);
+          toast.success("User has been created", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          router.push("/");
         });
       console.log(user, file);
     }
@@ -95,6 +115,7 @@ const page = () => {
 
   return (
     <div>
+      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
       <div className="bg-[#F5F5F9] min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-5xl bg-white shadow-xl rounded-2xl p-8 md:p-12">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-10 text-gray-800">

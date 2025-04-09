@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import useHelper from "../../../../../../Helper/helper";
 
 type PageProps = {
-  Id:number | 0
+  Id: number | 0;
 };
 
 interface Records {
@@ -14,7 +14,7 @@ interface Records {
   Img: string;
 }
 const Menu = ({ Id }: PageProps) => {
-    const helper = useHelper();
+  const helper = useHelper();
   const router = useRouter();
   const [posts, setPosts] = useState<Records[]>([]);
 
@@ -30,7 +30,11 @@ const Menu = ({ Id }: PageProps) => {
       </h1>
       {posts.map((post) => (
         <div key={post.Id} className="md:mb-6 mb-3">
-          <Image src={`${helper.GetUrl}/${post.Img}`} className="rounded" alt="" />
+          <Image
+            src={`https://localhost:44385/${post.Img}`}
+            className="rounded"
+            alt=""
+          />
           <p
             onClick={() => {
               router.push(`/Post/SinglePost/${post.Id}`);

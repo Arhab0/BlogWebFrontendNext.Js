@@ -3,6 +3,8 @@ import BladeLoader from "@/app/utils/Loaders/BladeLoader";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import useHelper from "../../../../../../Helper/helper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const router = useRouter();
@@ -45,17 +47,27 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         helper.storeData("token", res.token);
-        const fullName = res.user.FirstName+" "+res.user.LastName
-        helper.storeData("email", res.user.email);
-        helper.storeData("userName",fullName);
+        const fullName = res.user.FirstName + " " + res.user.LastName;
+        helper.storeData("email", res.user.Email);
+        helper.storeData("userName", fullName);
         helper.storeData("UserId", res.user.Id);
         helper.storeData("RoleId", res.user.RoleId);
-        helper.storeData("ProfilePhoto",res.user.ProfilePic)
+        helper.storeData("ProfilePhoto", res.user.ProfilePic);
         router.push("/Home");
       })
       .catch((err) => {
         console.log(err);
-        setErrors((prev) => ({ ...prev, password: "User not found!" }));
+        // setErrors((prev) => ({ ...prev, password: "User not found!" }));
+        toast.error("User not found!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -64,6 +76,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
+      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
       <div
         className="flex-1 text-center hidden lg:flex items-center justify-center"
         style={{ background: " radial-gradient(#6cb6eb, #2734c5)" }}
@@ -115,7 +128,12 @@ const Login = () => {
 
                 {/* Forgot Password Link */}
                 <div className="flex justify-end mt-1">
-                  <p className="text-sm text-blue-500 hover:cursor-pointer" onClick={()=>{router.push("/ForgotPassword")}}>
+                  <p
+                    className="text-sm text-blue-500 hover:cursor-pointer"
+                    onClick={() => {
+                      router.push("/ForgotPassword");
+                    }}
+                  >
                     Forgot Password?
                   </p>
                 </div>
