@@ -23,12 +23,8 @@ const Header = () => {
   };
 
   function handleLogout() {
-    helper.removeData("token");
-    helper.removeData("email");
-    helper.removeData("userName");
-    helper.removeData("UserId");
-    helper.removeData("RoleId");
-    helper.removeData("ProfilePhoto");
+    console.log("sdflsd");
+    localStorage.clear();
     router.push("/");
   }
   return (
@@ -108,7 +104,10 @@ const Header = () => {
                 Profile
               </button>
               <button
-                onClick={() => setDropdownOpen(false)}
+                onClick={() => {
+                  handleLogout();
+                  setDropdownOpen(false);
+                }}
                 className="block w-full px-4 py-2 text-left hover:bg-gray-100"
               >
                 <FaSignOutAlt className="mr-2 inline" />

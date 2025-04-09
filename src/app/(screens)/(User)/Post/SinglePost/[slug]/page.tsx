@@ -3,18 +3,12 @@ import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import moment from "moment";
 import Menu from "../../Menu/Menu";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import useHelper from "../../../../../../../Helper/helper";
 import Header from "@/app/utils/components/Header/Header";
 import { jsPDF } from "jspdf"; // Import jsPDF
 import html2canvas from "html2canvas"; // Import html2canvas
 import BladeLoader from "@/app/utils/Loaders/BladeLoader";
-
-type PageProps = {
-  params: {
-    slug: any;
-  };
-};
 
 interface Record {
   postId: number;
@@ -29,11 +23,13 @@ interface Record {
   AuthorName: string;
 }
 
-const page = ({ params }: PageProps) => {
+const page = () => {
+  const params = useParams();
+  const slug = params?.slug;
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLLoading] = useState(false);
   const router = useRouter();
-  const postId = parseInt(params.slug);
+  const postId = Number(slug);
   const [post, setPost] = useState<Record>();
   const helper = useHelper();
 

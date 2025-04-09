@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 
 export const metadata = {
-  title: "AIOU - Emarking",
-  description: "Allama Iqbal Open University",
+  title: "Blogs",
+  description: "Blogging platform",
 };
 
 interface DashboardLayoutProps {

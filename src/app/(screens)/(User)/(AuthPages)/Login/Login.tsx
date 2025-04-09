@@ -45,9 +45,10 @@ const Login = () => {
         helper.ConvertToFormData({ email: obj.email, password: obj.password })
       )
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         helper.storeData("token", res.token);
-        const fullName = res.user.FirstName + " " + res.user.LastName;
+        const fullName =
+          (res.user.FirstName || "") + " " + (res.user.LastName || "");
         helper.storeData("email", res.user.Email);
         helper.storeData("userName", fullName);
         helper.storeData("UserId", res.user.Id);
@@ -74,7 +75,7 @@ const Login = () => {
       });
   }
 
-  if (helper.getData("token") !== "" || helper.getData("token") !== undefined) {
+  if (helper.getData("token") !== "" && helper.getData("token") !== undefined) {
     router.push("/Home");
   }
 
