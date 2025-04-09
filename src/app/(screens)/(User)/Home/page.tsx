@@ -8,25 +8,38 @@ import Header from "@/app/utils/components/Header/Header";
 import Image from "next/image";
 import Logo from "../../../../../public/assets/blogLogo.png";
 import SearchInputTag from "@/app/utils/components/SearchInputTag/SearchInputTag";
+import { OPTIONS } from "@/app/lib/type";
 
 interface Records {
-  Id: number;
+  postId: number;
   Title: string;
   Description: string;
   Img: string;
+}
+interface Category {
+  Id: number;
+  Category1: string;
 }
 const page = () => {
   const [searchEntry, setSearchEntry] = useState("");
   const router = useRouter();
   const helper = useHelper();
-  const [posts, setPosts] = useState<Records[]>([]);
+  const [posts, setPosts] = useState<Records[]>([]); // State for the filtered posts
+  const [originalPosts, setOriginalPosts] = useState<Records[]>([]); // State for the original unfiltered posts
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [category, setCategory] = useState<{ value: number; label: string }[]>(
+    []
+  );
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [visibleStartIndex, setVisibleStartIndex] = useState(0);
   const postsPerPage = 12;
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     fetchData();
-  }, [error]);
+    fetchCategory();
+  }, []);
 
   useEffect(() => {
     window.scrollTo({
@@ -35,14 +48,63 @@ const page = () => {
     });
   }, [currentPage]);
 
-  const fetchData = async () => {};
+  const fetchData = async () => {
+    setLoading(true); // Set loading to true when fetching data
+    helper.xhr
+      .Get("/Posts/GetPosts")
+      .then((res) => {
+        setPosts(res);
+        setOriginalPosts(res); // Store the unfiltered posts
+      })
+      .catch((err) => {
+        // console.log(err);
+        setError("Failed to fetch posts");
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false once the API call completes
+      });
+  };
+
+  const fetchCategory = async () => {
+    helper.xhr
+      .Get("/Posts/GetCategories")
+      .then((res) => {
+        setCategory(
+          (res.category as any[]).map((D: any, I: number) => {
+            return {
+              value: D.Id,
+              label: D.Category1,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+  };
+
+  useEffect(() => {
+    SearchByKeyword();
+  }, [searchEntry]);
+
+  function SearchByKeyword() {
+    if (searchEntry === "") {
+      setPosts(originalPosts); // Reset to original posts
+    } else {
+      const filtered: Records[] = originalPosts.filter((element) =>
+        Object.values(element).some((value) =>
+          String(value).toLowerCase().includes(searchEntry.toLowerCase())
+        )
+      );
+      setPosts(filtered);
+    }
+  }
 
   const getText = (html: any) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent != null ? doc.body.textContent : "";
   };
-
-  const handleSearch = async (e: any) => {};
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -54,10 +116,27 @@ const page = () => {
     setCurrentPage(page);
   };
 
+  const handlePrev = () => {
+    if (visibleStartIndex > 0) {
+      setVisibleStartIndex(visibleStartIndex - 3);
+    }
+  };
+
+  const handleNext = () => {
+    if (visibleStartIndex + 3 < category.length) {
+      setVisibleStartIndex(visibleStartIndex + 3);
+    }
+  };
+
+  const visibleCategories = category.slice(
+    visibleStartIndex,
+    visibleStartIndex + 3
+  );
+
   return (
     <>
       <Header />
-      <div className="px-4 py-24 md:px-6 md:py-32">
+      <div className="px-4 py-10 md:px-6 md:py-10">
         <div className="max-w-7xl mx-auto">
           <span>
             {error && (
@@ -66,77 +145,103 @@ const page = () => {
               </p>
             )}
           </span>
+          <div className="flex justify-between items-center flex-wrap mb-8">
+            <div className="w-full md:w-1/3 flex justify-start">
+              <SearchInputTag
+                placeHolder="Search..."
+                name="searchBy"
+                value={searchEntry}
+                label=""
+                setter={(n, v) => {
+                  setSearchEntry(v);
+                }}
+              />
+            </div>
 
-          {currentPosts.length === 0 ? (
+            <div className="flex items-center space-x-2 mt-4 md:mt-0 w-full md:w-auto justify-center md:justify-start">
+              <button
+                onClick={handlePrev}
+                disabled={visibleStartIndex === 0}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+              >
+                <FaArrowLeft />
+              </button>
+
+              <div className="flex justify-between space-x-2 w-full md:w-[360px]">
+                {visibleCategories.map((cat, index) => (
+                  <button
+                    key={index}
+                    className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+                  >
+                    <span
+                      className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+                      onClick={() => {
+                        console.log(cat.value);
+                        setSelectedCategory(cat.value);
+                      }}
+                    >
+                      {cat.label}
+                    </span>
+                  </button>
+                ))}
+
+                {Array.from({ length: 3 - visibleCategories.length }).map(
+                  (_, i) => (
+                    <div key={i} className="flex-1" />
+                  )
+                )}
+              </div>
+
+              <button
+                onClick={handleNext}
+                disabled={visibleStartIndex + 3 >= category.length}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+              >
+                <FaArrowRight />
+              </button>
+            </div>
+          </div>
+
+          {loading ? (
+            <h1 className="text-5xl font-semibold text-center">
+              Fetching data...
+            </h1>
+          ) : currentPosts.length === 0 ? (
             <h1 className="text-5xl font-semibold text-center">
               No Posts Available
             </h1>
           ) : (
             <>
-              <div className="flex justify-between items-center flex-wrap mb-8">
-                <div className="w-full md:w-1/3 flex justify-start">
-                  <SearchInputTag
-                    placeHolder="Search..."
-                    name="searchBy"
-                    value={searchEntry}
-                    label=""
-                    setter={(n, v) => {
-                      setCurrentPage(1);
-                      setSearchEntry(v);
-                    }}
-                  />
-                </div>
-
-                {/* Categories */}
-                <div className="flex items-center space-x-4 mt-4 md:mt-0">
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-                    Category 1
-                  </button>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-                    Category 2
-                  </button>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-                    Category 3
-                  </button>
-                </div>
-              </div>
-
-              {currentPosts.map((post: Records) => (
-                <div className="relative mb-10" key={post.Id}>
+              {currentPosts.map((post: Records, index) => (
+                <div className="mb-12" key={post.postId}>
                   <div
-                    className={`flex flex-col md:flex-row ${
-                      post.Id % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                    } gap-6 md:gap-x-[80px]`}
+                    className={`flex flex-col ${
+                      index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                    } gap-8 items-center`}
                   >
-                    <div className="flex-2 relative">
-                      <div
-                        onClick={() => {
-                          `/Post/${post.Id}`;
-                        }}
-                      >
-                        <img
-                          src={`https://localhost:44385/${post.Img}`}
-                          className="w-full max-w-[430px] mx-auto hover:scale-95 object-cover duration-300 hover:drop-shadow-2xl cursor-pointer h-80 rounded"
-                          alt=""
-                        />
-                      </div>
+                    <div className="flex-shrink-0 cursor-pointer transition-transform duration-300 hover:scale-95">
+                      <img
+                        src={`https://localhost:44385/${post.Img}`}
+                        alt={post.Title}
+                        className="w-full max-w-[420px] h-80 object-cover rounded shadow-md"
+                      />
                     </div>
+
                     <div
-                      className="flex flex-1 pt-2 justify-center md:justify-start text-center md:text-left mt-2"
-                      onClick={() => {
-                        `/Post/${post.Id}`;
-                      }}
+                      className="flex-1 text-center md:text-left cursor-pointer"
+                      onClick={() =>
+                        router.push(`/Post/SinglePost/${post.postId}`)
+                      }
                     >
-                      <h1 className="md:text-3xl text-xl font-bold md:my-0 my-3 hover:drop-shadow-2xl">
+                      <h2 className="text-2xl md:text-3xl font-bold mb-4 hover:text-blue-600 transition-colors duration-200">
                         {post.Title}
-                      </h1>
-                      <p className="md:text-lg mt-5">
-                        {getText(post.Description).length > 50
-                          ? getText(post.Description).substring(0, 220)
+                      </h2>
+                      <p className="text-base md:text-lg text-gray-700 mb-4">
+                        {getText(post.Description).length > 220
+                          ? `${getText(post.Description).substring(0, 220)}...`
                           : getText(post.Description)}
-                        .....
                       </p>
-                      <button className="my-3 px-4 py-2 hover:drop-shadow-2xl rounded-md bg-[#b9e7e7] hover:-translate-y-1 duration-200">
+                      <button className="px-6 py-2 rounded-md bg-[#b9e7e7] hover:bg-[#a3dddd] transition duration-200 shadow-md hover:-translate-y-1">
                         Read More
                       </button>
                     </div>

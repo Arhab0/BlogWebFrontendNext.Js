@@ -45,6 +45,25 @@ const CreatePostPage = ({ params }: PageProps) => {
     }
   };
 
+  const GetCategories = () => {
+    helper.xhr
+      .Get("/Posts/GetCategories")
+      .then((res) => {
+        setCategories(
+          (res.category as any[]).map((D: any, I: number) => {
+            return {
+              value: D.Id,
+              label: D.Category1,
+            };
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+  };
+
   const handleSubmit = () => {
     if (!post.Title.trim()) {
       toast.error("Please enter a post title", {
@@ -135,10 +154,14 @@ const CreatePostPage = ({ params }: PageProps) => {
       });
   };
 
+  useEffect(() => {
+    GetCategories();
+  }, []);
+
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 py-16 px-6">
+      <div className="min-h-screen bg-gray-50 py-16 px-6 overflow-y-auto">
         <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
           {/* Main content */}
@@ -159,7 +182,7 @@ const CreatePostPage = ({ params }: PageProps) => {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-6 flex flex-col">
             <div className="bg-white p-6 rounded-2xl">
               <h3 className="text-xl font-semibold mb-4 text-gray-800">
                 Settings
@@ -169,7 +192,7 @@ const CreatePostPage = ({ params }: PageProps) => {
                   <div className="flex items-center justify-center w-full">
                     <label
                       htmlFor="dropzone-file"
-                      className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100"
+                      className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -188,7 +211,7 @@ const CreatePostPage = ({ params }: PageProps) => {
                           />
                         </svg>
                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Click to upload</span>{" "}
+                          <span className="font-semibold">Click to upload</span>
                         </p>
                       </div>
                       <input
@@ -239,13 +262,18 @@ const CreatePostPage = ({ params }: PageProps) => {
               <h3 className="text-xl font-semibold mb-4 text-gray-800">
                 Category
               </h3>
-              <Dropdown
-                placeHolder="Categories"
-                name="selectedRegion"
-                options={Categories}
-                activeId={selectedCategory}
-                handleDropdownChange={(n, v: any) => {}}
-              />
+              <div className="relative">
+                <Dropdown
+                  placeHolder="Categories"
+                  name="selectedRegion"
+                  options={Categories}
+                  activeId={selectedCategory}
+                  handleDropdownChange={(n, v: any) => {
+                    setSelectedCategory(v);
+                    setPost({ ...post, CatId: v });
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

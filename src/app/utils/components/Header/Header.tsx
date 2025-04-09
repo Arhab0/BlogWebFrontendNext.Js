@@ -22,38 +22,56 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
+  function handleLogout() {
+    helper.removeData("token");
+    helper.removeData("email");
+    helper.removeData("userName");
+    helper.removeData("UserId");
+    helper.removeData("RoleId");
+    helper.removeData("ProfilePhoto");
+    router.push("/");
+  }
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-[#f9f9f9] shadow-sm">
       <div className="flex items-center">
-        <Image src={BlogLogo} className="w-[90px]" alt="logo" />
+        <Image
+          src={BlogLogo}
+          className="w-[90px]"
+          alt="logo"
+          onClick={() => router.push("/Home")}
+        />
       </div>
 
       <div className="hidden md:flex items-center space-x-4">
         <div className="flex gap-2 items-center">
-          <button
-            className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-          >
-            <span
-              className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
-              onClick={() => {
-                router.push("/WritePost/Create");
-              }}
+          {helper.getData("token") && (
+            <button
+              className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             >
-              Write
-            </span>
-          </button>
-          <button
-            className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-          >
-            <span
-              className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
-              onClick={() => {
-                router.push("/");
-              }}
+              <span
+                className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+                onClick={() => {
+                  router.push("/WritePost/Create");
+                }}
+              >
+                Write
+              </span>
+            </button>
+          )}
+          {helper.getData("token") === "" && (
+            <button
+              className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             >
-              Login
-            </span>
-          </button>
+              <span
+                className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+                onClick={() => {
+                  router.push("/");
+                }}
+              >
+                Login
+              </span>
+            </button>
+          )}
         </div>
 
         <div className="relative">
@@ -169,6 +187,7 @@ const Header = () => {
               <button
                 onClick={() => {
                   setMenuOpen(false);
+                  handleLogout();
                 }}
                 className="w-full text-left px-4 py-2 rounded hover:bg-gray-100"
               >

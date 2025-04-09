@@ -78,7 +78,7 @@ const page = () => {
       helper.xhr
         .Post("/Auth/CreateUser", helper.ConvertToFormData({ user, file }))
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           // router.push("/Home");
         })
         .catch((err) => {

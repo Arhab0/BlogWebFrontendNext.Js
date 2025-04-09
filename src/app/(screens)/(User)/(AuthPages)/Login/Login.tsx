@@ -1,7 +1,7 @@
 "use client";
 import BladeLoader from "@/app/utils/Loaders/BladeLoader";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useHelper from "../../../../../../Helper/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -45,7 +45,7 @@ const Login = () => {
         helper.ConvertToFormData({ email: obj.email, password: obj.password })
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         helper.storeData("token", res.token);
         const fullName = res.user.FirstName + " " + res.user.LastName;
         helper.storeData("email", res.user.Email);
@@ -56,7 +56,7 @@ const Login = () => {
         router.push("/Home");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         // setErrors((prev) => ({ ...prev, password: "User not found!" }));
         toast.error("User not found!", {
           position: "top-right",
@@ -72,6 +72,10 @@ const Login = () => {
       .finally(() => {
         setLoading(false);
       });
+  }
+
+  if (helper.getData("token") !== "" || helper.getData("token") !== undefined) {
+    router.push("/Home");
   }
 
   return (
