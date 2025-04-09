@@ -29,7 +29,9 @@ export default function SideMenuLayout({ children }: DashboardLayoutProps) {
           {path.map((item, index) => (
             <span
               key={index}
-              className={index === path.length - 1 ? "font-bold text-black" : ""}
+              className={
+                index === path.length - 1 ? "font-bold text-black" : ""
+              }
             >
               {formatCamelCase(item)}
               {index !== path.length - 1 && " / "}

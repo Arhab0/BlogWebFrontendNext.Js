@@ -65,6 +65,7 @@ const Dropdown = ({
       ...provided,
       lineHeight: "34px",
       margin: 0,
+      whiteSpace: "nowrap",
     }),
     indicatorsContainer: (provided: any) => ({
       ...provided,
@@ -77,6 +78,7 @@ const Dropdown = ({
     option: (provided: any, state: any) => ({
       ...provided,
       fontSize: 12,
+      whiteSpace: "nowrap",
       color: state.isSelected ? "white" : "black",
       backgroundColor: state.isSelected
         ? "#2159ade6"

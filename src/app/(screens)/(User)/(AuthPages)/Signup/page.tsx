@@ -82,7 +82,7 @@ const page = () => {
         })
         .catch((err) => {
           console.log(err);
-          toast.success("Unable to create the ", {
+          toast.success("Unable to create the user", {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,

@@ -23,7 +23,6 @@ const Header = () => {
   };
 
   function handleLogout() {
-    console.log("sdflsd");
     localStorage.clear();
     router.push("/");
   }
@@ -97,7 +96,10 @@ const Header = () => {
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 bg-white text-black shadow-lg rounded-md w-40 z-50">
               <button
-                onClick={() => setDropdownOpen(false)}
+                onClick={() => {
+                  setDropdownOpen(false);
+                  router.push("/Profile");
+                }}
                 className="block w-full px-4 py-2 text-left hover:bg-gray-100"
               >
                 <FaUser className="mr-2 inline" />
