@@ -1,6 +1,6 @@
 "use client";
 import moment from "moment";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import useHelper from "../../../../../../../Helper/helper";
@@ -23,6 +23,7 @@ interface Record {
   userId: number;
 }
 const page = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const params = useParams();
@@ -34,7 +35,8 @@ const page = () => {
     { label: "🟢 Active", value: true },
     { label: "🔴 De-Activate", value: false },
   ]);
-  const [selectedOpton, setSelectedOption] = useState<boolean>(false);
+  const [selectedOption, setSelectedOption] = useState<boolean>(false);
+  const [statusChanged, setStatusChanged] = useState("null");
 
   const fetchData = async () => {
     setDataLoading(true);
@@ -54,61 +56,35 @@ const page = () => {
       });
   };
 
-  function ChangeActiveStatus() {
-    setLoading(true);
-    const data = {
-      id: postId,
-      status: selectedOpton,
-      userid: post?.userId,
-    };
+  useEffect(() => {
+    if (statusChanged !== "null") {
+      ChangeActiveStatus();
+    }
+  }, [statusChanged]);
 
-    if (selectedOpton !== post?.IsActive) {
+  function ChangeActiveStatus() {
+    if (selectedOption !== post?.IsActive) {
+      var obj = {
+        id: postId,
+        status: selectedOption,
+        userid: post?.userId,
+      };
+      console.log(obj);
       helper.xhr
-        .Post("/Profile/ChangeActiveStatus", helper.ConvertToFormData(data))
+        .Post(
+          "/Profile/ChangePostActiveStatus",
+          helper.ConvertToFormData({
+            id: postId,
+            status: selectedOption,
+            userid: post?.userId,
+          })
+        )
         .then((res) => {
           console.log(res);
-          if (
-            res.message ===
-            "Can't change the status of this post. It has rejected by Admin!"
-          ) {
-            toast.error(res.message, {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else if (res === true) {
-            toast.success("Post has been Activated", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          } else {
-            toast.success("Post has been De-Activated", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          }
-          fetchData();
         })
         .catch((err) => {})
         .finally(() => {
-          setLoading(false);
+          fetchData();
         });
     }
   }
@@ -117,7 +93,9 @@ const page = () => {
     fetchData();
   }, [postId]);
 
-  function Submit() {}
+  function Submit() {
+    router.push("/WritePost/" + postId);
+  }
   return (
     <>
       {dataLoading ? (
@@ -153,29 +131,31 @@ const page = () => {
                     }`}
                     onClick={Submit}
                   >
-                    {loading ? (
-                      <BladeLoader />
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <FiEdit2 />
-                        <p>Edit</p>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <FiEdit2 />
+                      <p>Edit</p>
+                    </div>
                   </span>
                 </button>
               </div>
               <div>
                 {post?.IsApproved === true ? (
-                  <Dropdown
-                    placeHolder="Categories"
-                    name="selectedRegion"
-                    options={options}
-                    activeId={selectedOpton}
-                    handleDropdownChange={(n, v: any) => {
-                      setSelectedOption(v);
-                      ChangeActiveStatus();
-                    }}
-                  />
+                  loading ? (
+                    <span className="text-black">
+                      <BladeLoader />
+                    </span>
+                  ) : (
+                    <Dropdown
+                      placeHolder="Categories"
+                      name="selectedOption"
+                      options={options}
+                      activeId={selectedOption}
+                      handleDropdownChange={(n, v: any) => {
+                        setSelectedOption(v);
+                        setStatusChanged("true");
+                      }}
+                    />
+                  )
                 ) : post?.IsApproved === null ? (
                   <span className="text-yellow-700">Pending</span>
                 ) : (
