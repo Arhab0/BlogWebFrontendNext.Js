@@ -10,10 +10,12 @@ import Highlight from "@tiptap/extension-highlight";
 interface RichTextEditorProps {
   content: string;
   onChange: (content: string) => void;
+  isUpdate: boolean;
 }
 export default function RichTextEditor({
   content,
   onChange,
+  isUpdate,
 }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
@@ -49,8 +51,10 @@ export default function RichTextEditor({
   return (
     <div>
       <MenuBar editor={editor} />
-      <div className="overflow-y-auto">
-        <EditorContent editor={editor}/>
+      <div
+        className={`overflow-y-auto ${isUpdate === true ? "h-72" : "h-auto"}`}
+      >
+        <EditorContent editor={editor} />
       </div>
     </div>
   );
