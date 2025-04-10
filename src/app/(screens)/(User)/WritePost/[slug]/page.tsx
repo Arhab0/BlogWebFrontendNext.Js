@@ -16,12 +16,50 @@ const CreatePostPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const helper = useHelper();
-  const [post, setPost] = useState({ Title: "", Description: "", CatId: 0 });
+  const [post, setPost] = useState({
+    postId: 0,
+    Title: "",
+    Description: "",
+    CatId: 0,
+    postImg: "",
+  });
   const [Categories, setCategories] = useState<OPTIONS[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const isNumber = !isNaN(Number(slug));
+  const [dataLoading, setDataLoading] = useState(false);
+
+  useEffect(() => {
+    if (isNumber) {
+      fetchData();
+    }
+  }, [slug]);
+  function fetchData() {
+    // setDataLoading(true);
+    helper.xhr
+      .Get(
+        "/Posts/GetPostById",
+        helper.GetURLParamString({ id: Number(slug) }).toString()
+      )
+      .then((res) => {
+        var data = res[0];
+        console.log(res);
+        setPost(data);
+        setSelectedImage(data.postImg);
+        setSelectedCategory(data.categoryId);
+      })
+      .catch((err) => {})
+      .finally(() => {
+        // setDataLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    console.log("post obj", post);
+  }, [post]);
 
   const onChange = (content: string) => {
     setPost({ ...post, Description: content });
@@ -41,6 +79,7 @@ const CreatePostPage = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    setPost({ ...post, postImg: "" });
   };
 
   const GetCategories = () => {
@@ -135,7 +174,13 @@ const CreatePostPage = () => {
           theme: "light",
         });
 
-        setPost({ Title: "", Description: "", CatId: 0 });
+        setPost({
+          postId: 0,
+          Title: "",
+          Description: "",
+          CatId: 0,
+          postImg: "",
+        });
         setSelectedImage(null);
         setFile(null);
         setSelectedCategory(0);
@@ -153,6 +198,109 @@ const CreatePostPage = () => {
       });
   };
 
+  const handleUpdate = () => {
+    if (!post.Title.trim()) {
+      toast.error("Please enter a post title", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    if (!selectedCategory || selectedCategory === 0) {
+      toast.error("Please select a category", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    if (!file) {
+      toast.error("Please upload a cover image", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    if (!post.Description.trim()) {
+      toast.error("Please enter a post description", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
+    setLoading(true);
+    var updatePost = {
+      Id: 0,
+      Title: "",
+      Description: "",
+      CatId: 0,
+      postImg: "",
+    };
+    updatePost = { ...post, Id: Number(slug) };
+    helper.xhr
+      .Post("/Posts/UpdatePost", helper.ConvertToFormData({ updatePost, file }))
+      .then((res) => {
+        toast.success("Post updated successfully!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        setPost({
+          postId: 0,
+          Title: "",
+          Description: "",
+          CatId: 0,
+          postImg: "",
+        });
+        setSelectedImage(null);
+        setFile(null);
+        setSelectedCategory(0);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      })
+      .catch((error) => {
+        toast.error("Failed to update post. Try again.", {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+        router.push("/Profile/AllPosts");
+      });
+  };
   useEffect(() => {
     GetCategories();
   }, []);
@@ -166,9 +314,15 @@ const CreatePostPage = () => {
           {/* Main content */}
           <div className="md:col-span-2">
             <div className="bg-white p-6 rounded-2xl">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                Create New Post
-              </h2>
+              {isNumber === true ? (
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                  Update Post
+                </h2>
+              ) : (
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                  Create New Post
+                </h2>
+              )}
               <input
                 type="text"
                 placeholder="Post Title"
@@ -176,11 +330,15 @@ const CreatePostPage = () => {
                 onChange={(e) => setPost({ ...post, Title: e.target.value })}
                 className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <RichTextEditor content={post.Description} onChange={onChange} />
+              <RichTextEditor
+                key={post.postId}
+                content={post.Description}
+                isUpdate={isNumber === true ? true : false}
+                onChange={onChange}
+              />
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6 flex flex-col">
             <div className="bg-white p-6 rounded-2xl">
               <h3 className="text-xl font-semibold mb-4 text-gray-800">
@@ -214,24 +372,31 @@ const CreatePostPage = () => {
                         </p>
                       </div>
                       <input
-                        id="dropzone-file"
                         type="file"
-                        ref={fileInputRef}
-                        onChange={handleImageChange}
-                        className="hidden"
                         accept="image/*"
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        onChange={handleImageChange}
                       />
                     </label>
                   </div>
                 ) : (
                   <div className="relative mt-4">
-                    <img
-                      src={selectedImage}
-                      alt="preview"
-                      className="rounded-md h-64 w-full object-cover"
-                    />
+                    {post.postImg !== "" ? (
+                      <img
+                        src={`https://localhost:44385/${post.postImg}`}
+                        className="w-full h-64 rounded-md object-cover border border-gray-300"
+                      />
+                    ) : (
+                      <img
+                        src={selectedImage || "/default-avatar.png"}
+                        className="w-full h-64 rounded-md object-cover border border-gray-300"
+                      />
+                    )}
                     <button
-                      onClick={handleRemoveImage}
+                      onClick={() => {
+                        setSelectedImage(null);
+                        setPost({ ...post, postImg: "" });
+                      }}
                       className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md"
                       title="Remove Image"
                     >
@@ -250,9 +415,14 @@ const CreatePostPage = () => {
                       ? "bg-transparent text-white"
                       : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
                   }`}
-                  onClick={handleSubmit}
                 >
-                  {loading ? <BladeLoader /> : "Publish"}
+                  {loading ? (
+                    <BladeLoader />
+                  ) : isNumber === true ? (
+                    <span onClick={handleUpdate}> Update</span>
+                  ) : (
+                    <span onClick={handleSubmit}>Publish</span>
+                  )}
                 </span>
               </button>
             </div>
