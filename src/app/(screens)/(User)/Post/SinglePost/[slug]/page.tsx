@@ -9,6 +9,11 @@ import Header from "@/app/utils/components/Header/Header";
 import { jsPDF } from "jspdf"; // Import jsPDF
 import html2canvas from "html2canvas"; // Import html2canvas
 import BladeLoader from "@/app/utils/Loaders/BladeLoader";
+import AddToWatchLater from "../../../../../../../public/assets/addTobWatchLater.svg";
+import WatchedLater from "../../../../../../../public/assets/WatchedLater.svg";
+import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Record {
   postId: number;
@@ -32,6 +37,9 @@ const page = () => {
   const postId = Number(slug);
   const [post, setPost] = useState<Record>();
   const helper = useHelper();
+  const [isWatchLaterChanged, setIsWatchLaterChanged] = useState("null");
+  const [status, setStatus] = useState(false);
+  const [isWatchLater, setIsWatchLater] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -41,7 +49,8 @@ const page = () => {
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        var data = res[0];
+        console.log(res);
+        var data = res;
         setPost(data);
       })
       .catch((err) => {})
@@ -52,9 +61,59 @@ const page = () => {
 
   useEffect(() => {
     fetchData();
+    getData();
   }, [postId]);
 
+  useEffect(() => {
+    if (isWatchLaterChanged !== "null") {
+      handleWatchLater();
+    }
+  }, [isWatchLaterChanged]);
+
   const downloadPDF = () => {};
+
+  function getData() {
+    helper.xhr
+      .Get(
+        "/Profile/GetWatahLaterPostById",
+        helper.GetURLParamString({ id: postId }).toString()
+      )
+      .then((res) => {
+        // console.log(res);
+        // var data = res;
+        setIsWatchLater(res.isWatchLater);
+      })
+      .catch((err) => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  function handleWatchLater() {
+    helper.xhr
+      .Post(
+        "/Posts/AddToWatchLater",
+        helper.ConvertToFormData({ id: postId, check: status })
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      })
+      .finally(() => {
+        getData();
+      });
+  }
 
   return (
     <>
@@ -63,6 +122,7 @@ const page = () => {
         <h1 className="text-5xl font-semibold text-center">Fetching data...</h1>
       ) : (
         <div className="px-6 py-10">
+          <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
           <div className="max-w-7xl">
             <div className="w-[100%] flex md:flex-row gap-11 flex-col">
               <div className="md:w-[70%] w-full">
@@ -72,23 +132,58 @@ const page = () => {
                     src={`https://localhost:44385/${post?.postImg}`}
                     alt=""
                   />
-                  <div className="flex items-center gap-4 mt-3">
-                    {post?.userPhoto ? (
-                      <img
-                        src={`https://localhost:44385/${post?.userPhoto}`}
-                        className="w-10 h-10 rounded-full"
-                        alt=""
-                      />
-                    ) : (
-                      <FaUser />
-                    )}
-                    <div>
-                      <span className="font-bold text-[20px]">
-                        {post?.AuthorName}
-                      </span>
-                      <p className="text-sm">
-                        posted {moment(post?.CreatedAt).fromNow()}
-                      </p>
+                  <div className="flex items-center justify-between flex-">
+                    <div className="flex items-center gap-4 mt-3">
+                      {post?.userPhoto ? (
+                        <img
+                          src={`https://localhost:44385/${post?.userPhoto}`}
+                          className="w-10 h-10 rounded-full"
+                          alt=""
+                        />
+                      ) : (
+                        <FaUser />
+                      )}
+                      <div>
+                        <span className="font-bold text-[20px]">
+                          {post?.AuthorName}
+                        </span>
+                        <p className="text-sm">
+                          posted {moment(post?.CreatedAt).fromNow()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {isWatchLater == true ? (
+                        <div className="flex items-center gap-2">
+                          <p className="text-gray-600">Remove from</p>
+                          <Image
+                            src={WatchedLater}
+                            height={20}
+                            width={20}
+                            className="cursor-pointer"
+                            alt="watch later svg"
+                            onClick={() => {
+                              setStatus(false);
+                              setIsWatchLaterChanged("false");
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <p className="text-gray-600">Add to</p>
+                          <Image
+                            src={AddToWatchLater}
+                            height={20}
+                            width={20}
+                            className="cursor-pointer"
+                            alt="watch later svg"
+                            onClick={() => {
+                              setStatus(true);
+                              setIsWatchLaterChanged("true");
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                   <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>

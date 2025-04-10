@@ -45,8 +45,7 @@ const CreatePostPage = () => {
         helper.GetURLParamString({ id: Number(slug) }).toString()
       )
       .then((res) => {
-        var data = res[0];
-        console.log(res);
+        var data = res;
         setPost(data);
         setSelectedImage(data.postImg);
         setSelectedCategory(data.categoryId);

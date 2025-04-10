@@ -46,7 +46,7 @@ const page = () => {
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        var data = res[0];
+        var data = res;
         setPost(data);
         setSelectedOption(data?.IsActive);
       })
