@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import useHelper from "../../../../../../Helper/helper";
 import { useRouter } from "next/navigation";
 import moment from "moment";
-
+import { IoCreateOutline } from "react-icons/io5";
 interface Records {
   Id: number;
   Title: string;
@@ -42,6 +42,14 @@ const page = () => {
 
   return (
     <div>
+      <p
+        className="flex justify-end my-2 text-blue-600"
+        onClick={() => router.push("/WritePost/Create")}
+      >
+        <span className="flex items-center gap-2 cursor-pointer">
+          <IoCreateOutline /> Create Post
+        </span>
+      </p>
       <div className="min-h-screen flex items-center justify-center w-full px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:my-0 my-3">
           {posts.map((item, index) => (

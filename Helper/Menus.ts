@@ -9,6 +9,7 @@ type Menus = {
 
 export const menus: Menus = {
   Profile: [
+    {label:"Home", path:"/Home"},
     { label: "Profile", path: "/Profile" },
     { label: "All Post", path: "/Profile/AllPosts"},
     { label: "Watch Later", path: "/Profile/WatchLater"},
