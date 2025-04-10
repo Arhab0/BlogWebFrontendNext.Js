@@ -14,5 +14,10 @@ export const menus: Menus = {
     { label: "All Post", path: "/Profile/AllPosts"},
     { label: "Watch Later", path: "/Profile/WatchLater"},
     { label: "History", path: "/Profile/History"},
+  ],
+  DashBoard:[
+    {label:"DashBoard", path:"/DashBoard"},
+    {label:"DashBoard", path:"/DashBoard/Posts"},
+    {label:"DashBoard", path:"/DashBoard/Users"},
   ]
 };
