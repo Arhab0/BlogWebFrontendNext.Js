@@ -20,7 +20,7 @@ const SearchInputTag = ({
   subfield,
 }: Props) => {
   return (
-    <div className={`${styles.inputGroup} flex-1`}>
+    <div className={`flex-1 bg-white`}>
       {label && (
         <div className="flex items-center gap-2">
           <label
@@ -43,7 +43,7 @@ const SearchInputTag = ({
           placeholder={placeHolder}
           disabled={disabled}
           onChange={(e) => {
-            setter(name??"", e.target.value);
+            setter(name ?? "", e.target.value);
           }}
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 ">
