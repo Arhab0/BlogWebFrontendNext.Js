@@ -5,21 +5,21 @@ import { FaArrowLeft } from "react-icons/fa";
 import useHelper from "../../../../../Helper/helper";
 import { useRouter } from "next/navigation";
 import Header from "@/app/utils/components/Header/Header";
-import Image from "next/image";
-import Logo from "../../../../../public/assets/blogLogo.png";
 import SearchInputTag from "@/app/utils/components/SearchInputTag/SearchInputTag";
-import { OPTIONS } from "@/app/lib/type";
 
 interface Records {
   postId: number;
   Title: string;
   Description: string;
   Img: string;
+  categoryId: number;
 }
+
 interface Category {
   Id: number;
   Category1: string;
 }
+
 const page = () => {
   const [searchEntry, setSearchEntry] = useState("");
   const router = useRouter();
@@ -28,13 +28,11 @@ const page = () => {
   const [originalPosts, setOriginalPosts] = useState<Records[]>([]); // State for the original unfiltered posts
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [category, setCategory] = useState<{ value: number; label: string }[]>(
-    []
-  );
+  const [category, setCategory] = useState([{ value: 0, label: "All Posts" }]); // Adding "All Posts"
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [visibleStartIndex, setVisibleStartIndex] = useState(0);
-  const postsPerPage = 12;
   const [loading, setLoading] = useState(true); // Loading state
+
+  const postsPerPage = 12;
 
   useEffect(() => {
     fetchData();
@@ -57,7 +55,6 @@ const page = () => {
         setOriginalPosts(res); // Store the unfiltered posts
       })
       .catch((err) => {
-        // console.log(err);
         setError("Failed to fetch posts");
       })
       .finally(() => {
@@ -69,36 +66,46 @@ const page = () => {
     helper.xhr
       .Get("/Posts/GetCategories")
       .then((res) => {
-        setCategory(
-          (res.category as any[]).map((D: any, I: number) => {
+        setCategory([
+          { value: 0, label: "All Posts" }, // Adding "All Posts" option
+          ...(res.category as any[]).map((D: any) => {
             return {
               value: D.Id,
               label: D.Category1,
             };
-          })
-        );
+          }),
+        ]);
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {});
+      });
   };
 
   useEffect(() => {
     SearchByKeyword();
-  }, [searchEntry]);
+  }, [searchEntry, selectedCategory]);
 
   function SearchByKeyword() {
-    if (searchEntry === "") {
-      setPosts(originalPosts); // Reset to original posts
-    } else {
-      const filtered: Records[] = originalPosts.filter((element) =>
+    let filtered = [...originalPosts];
+
+    // Filter by search entry
+    if (searchEntry.trim() !== "") {
+      filtered = filtered.filter((element) =>
         Object.values(element).some((value) =>
           String(value).toLowerCase().includes(searchEntry.toLowerCase())
         )
       );
-      setPosts(filtered);
     }
+
+    // If a category is selected and it's not "All Posts", filter by categoryId
+    if (selectedCategory !== 0) {
+      filtered = filtered.filter(
+        (element) => element.categoryId === selectedCategory
+      );
+    }
+
+    setPosts(filtered);
+    setCurrentPage(1); // Reset to the first page after filtering
   }
 
   const getText = (html: any) => {
@@ -116,22 +123,19 @@ const page = () => {
     setCurrentPage(page);
   };
 
-  const handlePrev = () => {
-    if (visibleStartIndex > 0) {
-      setVisibleStartIndex(visibleStartIndex - 3);
-    }
-  };
-
-  const handleNext = () => {
-    if (visibleStartIndex + 3 < category.length) {
-      setVisibleStartIndex(visibleStartIndex + 3);
-    }
-  };
-
-  const visibleCategories = category.slice(
-    visibleStartIndex,
-    visibleStartIndex + 3
+  const CatPerTime = 3;
+  const [catPage, setCatPage] = useState(1);
+  const CategoryindexOfLastPost = catPage * CatPerTime;
+  const CategoryindexOfFirstPost = CategoryindexOfLastPost - CatPerTime;
+  const currentCategory = category.slice(
+    CategoryindexOfFirstPost,
+    CategoryindexOfLastPost
   );
+  const totalCategory = Math.ceil(category.length / CatPerTime);
+
+  const handleCategoryChange = (page: number) => {
+    setCatPage(page);
+  };
 
   return (
     <>
@@ -160,23 +164,26 @@ const page = () => {
 
             <div className="flex items-center space-x-2 mt-4 md:mt-0 w-full md:w-auto justify-center md:justify-start">
               <button
-                onClick={handlePrev}
-                disabled={visibleStartIndex === 0}
+                onClick={() => handleCategoryChange(catPage - 1)}
+                disabled={catPage === 1}
                 className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
               >
                 <FaArrowLeft />
               </button>
 
               <div className="flex justify-between space-x-2 w-full md:w-[360px]">
-                {visibleCategories.map((cat, index) => (
+                {currentCategory.map((cat, index) => (
                   <button
                     key={index}
-                    className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+                    className={`${
+                      cat.value === selectedCategory
+                        ? "from-purple-600 to-blue-500 text-white"
+                        : ""
+                    } relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
                   >
                     <span
                       className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
                       onClick={() => {
-                        console.log(cat.value);
                         setSelectedCategory(cat.value);
                       }}
                     >
@@ -184,17 +191,11 @@ const page = () => {
                     </span>
                   </button>
                 ))}
-
-                {Array.from({ length: 3 - visibleCategories.length }).map(
-                  (_, i) => (
-                    <div key={i} className="flex-1" />
-                  )
-                )}
               </div>
 
               <button
-                onClick={handleNext}
-                disabled={visibleStartIndex + 3 >= category.length}
+                onClick={() => handleCategoryChange(catPage + 1)}
+                disabled={catPage === totalCategory}
                 className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
               >
                 <FaArrowRight />
