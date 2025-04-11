@@ -42,7 +42,10 @@ const Login = () => {
     helper.xhr
       .Post(
         "/Auth/Login",
-        helper.ConvertToFormData({ email: obj.email, password: obj.password })
+        helper.ConvertToFormData({
+          email: obj.email.trim(),
+          password: obj.password,
+        })
       )
       .then((res) => {
         console.log(res);
@@ -73,10 +76,6 @@ const Login = () => {
       .finally(() => {
         setLoading(false);
       });
-  }
-
-  if (helper.getData("token") !== "" && helper.getData("token") !== undefined) {
-    router.push("/Home");
   }
 
   return (
