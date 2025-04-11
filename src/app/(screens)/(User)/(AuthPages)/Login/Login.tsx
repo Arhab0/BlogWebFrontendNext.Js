@@ -57,7 +57,11 @@ const Login = () => {
         helper.storeData("UserId", res.user.Id);
         helper.storeData("RoleId", res.user.RoleId);
         helper.storeData("ProfilePhoto", res.user.ProfilePic);
-        router.push("/Home");
+        if (res.user.RoleId === 1) {
+          router.push("/DashBoard");
+        } else {
+          router.push("/Home");
+        }
       })
       .catch((err) => {
         // console.log(err);

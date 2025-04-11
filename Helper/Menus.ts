@@ -8,6 +8,7 @@ type Menus = {
 };
 
 export const menus: Menus = {
+  // if()
   Profile: [
     {label:"Home", path:"/Home"},
     { label: "Profile", path: "/Profile" },
