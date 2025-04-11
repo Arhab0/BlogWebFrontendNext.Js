@@ -17,7 +17,8 @@ export const menus: Menus = {
   ],
   DashBoard:[
     {label:"DashBoard", path:"/DashBoard"},
-    {label:"DashBoard", path:"/DashBoard/Posts"},
-    {label:"DashBoard", path:"/DashBoard/Users"},
+    {label:"Posts", path:"/DashBoard/Posts"},
+    {label:"Users", path:"/DashBoard/Users"},
+    {label:"Post Requests", path:"/DashBoard/PostRequest"},
   ]
 };

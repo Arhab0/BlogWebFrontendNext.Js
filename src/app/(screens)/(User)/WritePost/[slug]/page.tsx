@@ -22,9 +22,16 @@ const CreatePostPage = () => {
     Description: "",
     CatId: 0,
     postImg: "",
+    isAdult: true,
   });
   const [Categories, setCategories] = useState<OPTIONS[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(0);
+  const [isAdult, setisAdult] = useState([
+    // { label: "is Adult", value: "" },
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+  ]);
+  const [selectedAdult, setSelectedAdult] = useState(true);
   const [file, setFile] = useState(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -179,6 +186,7 @@ const CreatePostPage = () => {
           Description: "",
           CatId: 0,
           postImg: "",
+          isAdult: true,
         });
         setSelectedImage(null);
         setFile(null);
@@ -283,6 +291,7 @@ const CreatePostPage = () => {
           Description: "",
           CatId: 0,
           postImg: "",
+          isAdult: true,
         });
         setSelectedImage(null);
         setFile(null);
@@ -372,8 +381,9 @@ const CreatePostPage = () => {
                       </div>
                       <input
                         type="file"
+                        id="dropzone-file"
                         accept="image/*"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        className="hidden"
                         onChange={handleImageChange}
                       />
                     </label>
@@ -407,6 +417,13 @@ const CreatePostPage = () => {
 
               <button
                 className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+                onClick={() => {
+                  if (isNumber) {
+                    handleUpdate();
+                  } else {
+                    handleSubmit();
+                  }
+                }}
               >
                 <span
                   className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
@@ -418,29 +435,48 @@ const CreatePostPage = () => {
                   {loading ? (
                     <BladeLoader />
                   ) : isNumber === true ? (
-                    <span onClick={handleUpdate}> Update</span>
+                    <span>Update</span>
                   ) : (
-                    <span onClick={handleSubmit}>Publish</span>
+                    <span>Publish</span>
                   )}
                 </span>
               </button>
             </div>
+            <div className="bg-white">
+              <div className="bg-white rounded-2xl mb-2">
+                <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                  Is Adult
+                </h3>
+                <div className="relative">
+                  <Dropdown
+                    placeHolder="Is Adult"
+                    name="selectedAdult"
+                    options={isAdult}
+                    activeId={selectedAdult}
+                    handleDropdownChange={(n, v: any) => {
+                      setPost({ ...post, isAdult: v });
+                      setSelectedAdult(v);
+                    }}
+                  />
+                </div>
+              </div>
 
-            <div className="bg-white p-6 rounded-2xl">
-              <h3 className="text-xl font-semibold mb-4 text-gray-800">
-                Category
-              </h3>
-              <div className="relative">
-                <Dropdown
-                  placeHolder="Categories"
-                  name="selectedRegion"
-                  options={Categories}
-                  activeId={selectedCategory}
-                  handleDropdownChange={(n, v: any) => {
-                    setSelectedCategory(v);
-                    setPost({ ...post, CatId: v });
-                  }}
-                />
+              <div className="bg-white rounded-2xl">
+                <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                  Category
+                </h3>
+                <div className="relative">
+                  <Dropdown
+                    placeHolder="Categories"
+                    name="selectedRegion"
+                    options={Categories}
+                    activeId={selectedCategory}
+                    handleDropdownChange={(n, v: any) => {
+                      setSelectedCategory(v);
+                      setPost({ ...post, CatId: v });
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>

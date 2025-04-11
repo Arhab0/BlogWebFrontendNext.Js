@@ -32,11 +32,14 @@ const page = () => {
   const [post, setPost] = useState<Record>();
   const helper = useHelper();
   const [options, setOptions] = useState([
-    { label: "🟢 Active", value: true },
-    { label: "🔴 De-Activate", value: false },
+    { label: "Select Option", value: "" },
+    { label: "🟢 Approve", value: "true" },
+    { label: "🔴 Reject", value: "false" },
   ]);
-  const [selectedOption, setSelectedOption] = useState<boolean>(false);
+  const [selectedOption, setSelectedOption] = useState<string>("");
   const [statusChanged, setStatusChanged] = useState("null");
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const fetchData = async () => {
     setDataLoading(true);
@@ -48,7 +51,6 @@ const page = () => {
       .then((res) => {
         var data = res;
         setPost(data);
-        setSelectedOption(data?.IsActive);
       })
       .catch((err) => {})
       .finally(() => {
@@ -63,39 +65,28 @@ const page = () => {
   }, [statusChanged]);
 
   function ChangeActiveStatus() {
-    if (selectedOption !== post?.IsActive) {
-      var obj = {
-        id: postId,
-        status: selectedOption,
-        userid: post?.userId,
-      };
-      console.log(obj);
-      helper.xhr
-        .Post(
-          "/Profile/ChangePostActiveStatus",
-          helper.ConvertToFormData({
-            id: postId,
-            status: selectedOption,
-            userid: post?.userId,
-          })
-        )
-        .then((res) => {
-          console.log(res);
+    helper.xhr
+      .Post(
+        "/Admin/ApprovePost",
+        helper.ConvertToFormData({
+          id: postId,
+          check: selectedOption === "true" ? true : false,
+          reason: rejectionReason,
         })
-        .catch((err) => {})
-        .finally(() => {
-          fetchData();
-        });
-    }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {})
+      .finally(() => {
+        router.back();
+      });
   }
 
   useEffect(() => {
     fetchData();
   }, [postId]);
 
-  function Submit() {
-    router.push("/WritePost/" + postId);
-  }
   return (
     <>
       {dataLoading ? (
@@ -104,6 +95,40 @@ const page = () => {
         </div>
       ) : (
         <div className="min-h-screen py-5 w-full px-4">
+          {showRejectModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+              <div className="bg-white p-6 rounded-lg w-full max-w-md">
+                <h2 className="text-xl font-semibold mb-4">
+                  Reason for Rejection
+                </h2>
+                <textarea
+                  className="w-full border p-2 rounded-md min-h-[120px]"
+                  placeholder="Type your reason here..."
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                />
+                <div className="flex justify-end mt-4 gap-3">
+                  <button
+                    onClick={() => {
+                      setShowRejectModal(false);
+                    }}
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowRejectModal(false);
+                      setStatusChanged("false");
+                    }}
+                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <p className="mb-4 mt-2">
             <span
               className="hover:underline cursor-pointer text-blue-600"
@@ -127,51 +152,20 @@ const page = () => {
             </div>
 
             <div className="flex items-center justify-end md:my-0 my-3">
-              <div>
-                {post?.IsApproved !== false && (
-                  <button
-                    className={`relative inline-flex items-center justify-center p-0.5 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-                  >
-                    <span
-                      className={`relative px-8 py-1 rounded-md transition-all items-center ease-in duration-75 ${
-                        loading
-                          ? "bg-transparent text-white"
-                          : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
-                      }`}
-                      onClick={Submit}
-                    >
-                      <div className="flex items-center gap-2">
-                        <FiEdit2 />
-                        <p>Edit</p>
-                      </div>
-                    </span>
-                  </button>
-                )}
-              </div>
-              <div>
-                {post?.IsApproved === true ? (
-                  loading ? (
-                    <span className="text-black">
-                      <BladeLoader />
-                    </span>
-                  ) : (
-                    <Dropdown
-                      placeHolder="Categories"
-                      name="selectedOption"
-                      options={options}
-                      activeId={selectedOption}
-                      handleDropdownChange={(n, v: any) => {
-                        setSelectedOption(v);
-                        setStatusChanged("true");
-                      }}
-                    />
-                  )
-                ) : post?.IsApproved === null ? (
-                  <span className="text-yellow-700 font-bold">Pending</span>
-                ) : (
-                  <span className="text-red-700 font-bold">Rejected</span>
-                )}
-              </div>
+              <Dropdown
+                placeHolder="Categories"
+                name="selectedOption"
+                options={options}
+                activeId={selectedOption}
+                handleDropdownChange={(n, v: any) => {
+                  setSelectedOption(v);
+                  if (v === "false") {
+                    setShowRejectModal(true);
+                  } else {
+                    setStatusChanged("true");
+                  }
+                }}
+              />
             </div>
           </div>
           <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
