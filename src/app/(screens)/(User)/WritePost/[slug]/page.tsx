@@ -234,7 +234,7 @@ const CreatePostPage = () => {
       return;
     }
 
-    if (!file) {
+    if (!file && isNumber === false) {
       toast.error("Please upload a cover image", {
         position: "top-right",
         autoClose: 5000,

@@ -8,6 +8,7 @@ import useHelper from "../../../../../../Helper/helper";
 import moment from "moment";
 import SearchInputTag from "@/app/utils/components/SearchInputTag/SearchInputTag";
 import Eye from "../../../../../../public/assets/eye.svg";
+import Edit from "../../../../../../public/assets/edit.svg";
 
 interface Records {
   AuthorName: string;
@@ -16,7 +17,8 @@ interface Records {
   CreatedAt: string;
   postImg: string;
   CategoryName: string;
-  isAdult: string;
+  ReasonForReject: string;
+  RejectCount: number;
 }
 
 const page = () => {
@@ -26,6 +28,8 @@ const page = () => {
   const [searchEntry, setSearchEntry] = useState<string>("");
   const [result, setResult] = useState<Records[]>([]);
   const [mappedData, setMappedData] = useState<Records[]>([]);
+  const [rejectReason, setRejectReason] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
@@ -64,7 +68,7 @@ const page = () => {
 
   function FetchData() {
     helper.xhr
-      .Get("/Admin/GetPendingPosts")
+      .Get("/Profile/GetRejectedPosts")
       .then((res) => {
         setResult(res);
         setMappedData(res);
@@ -75,6 +79,29 @@ const page = () => {
 
   return (
     <div className="font-alata flex-1 h-full cursor-default">
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4">Reason for Rejection</h2>
+            <textarea
+              className="w-full border p-2 rounded-md min-h-[120px]"
+              placeholder="Type your reason here..."
+              value={rejectReason}
+              disabled={true}
+            />
+            <div className="flex justify-end mt-4 gap-3">
+              <button
+                onClick={() => {
+                  setShowModal(false);
+                }}
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="w-full md:w-1/4 bg-transparent">
         <SearchInputTag
           placeHolder="Search..."
@@ -94,11 +121,11 @@ const page = () => {
               <tr>
                 <th className="text-left pr-2 py-1">Img</th>
                 <th className="text-left px-2 py-1">Title</th>
-                <th className="text-left px-2 py-1">Author Name</th>
                 <th className="text-left px-2 py-1">Posted At</th>
                 <th className="text-left px-2 py-1">Category Name</th>
-                <th className="text-left px-2 py-1">is Adult</th>
-                <th className="text-left px-2 py-1">View</th>
+                <th className="text-left px-2 py-1">Reject Count</th>
+                <th className="text-left px-2 py-1">Reject Reason</th>
+                <th className="text-left px-2 py-1">Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -112,24 +139,40 @@ const page = () => {
                     />
                   </td>
                   <td className="px-2 py-1">{e.postTitle}</td>
-                  <td className="px-2 py-1">{e.AuthorName}</td>
                   <td className="px-2 py-1">
                     {moment(e?.CreatedAt).fromNow()}
                   </td>
                   <td className="px-2 py-1">{e.CategoryName}</td>
-                  <td className="px-2 py-1">{e.isAdult}</td>
+                  <td className="px-2 py-1">
+                    {e.RejectCount > 0 ? e.RejectCount : 0}
+                  </td>
                   <td className="px-2 py-1">
                     <Image
                       className="cursor-pointer"
-                      onClick={() =>
-                        router.push(`/DashBoard/PostRequest/${e.postId}`)
-                      }
+                      onClick={() => {
+                        setRejectReason(e.ReasonForReject);
+                        setShowModal(true);
+                      }}
                       src={Eye}
                       height={15}
                       width={15}
                       alt="eye"
                     />
                   </td>
+                  {e.RejectCount < 2 && (
+                    <td className="px-2 py-1">
+                      <Image
+                        className="cursor-pointer"
+                        onClick={() => {
+                          router.push(`/WritePost/${e.postId}`);
+                        }}
+                        src={Edit}
+                        height={15}
+                        width={15}
+                        alt="eye"
+                      />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

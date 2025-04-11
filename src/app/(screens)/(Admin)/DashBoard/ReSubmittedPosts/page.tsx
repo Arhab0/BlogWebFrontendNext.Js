@@ -17,6 +17,7 @@ interface Records {
   postImg: string;
   CategoryName: string;
   isAdult: string;
+  RejectCount: number;
 }
 
 const page = () => {
@@ -64,7 +65,7 @@ const page = () => {
 
   function FetchData() {
     helper.xhr
-      .Get("/Admin/GetPendingPosts")
+      .Get("/Admin/GetReSubmitedPosts")
       .then((res) => {
         setResult(res);
         setMappedData(res);
@@ -98,6 +99,7 @@ const page = () => {
                 <th className="text-left px-2 py-1">Posted At</th>
                 <th className="text-left px-2 py-1">Category Name</th>
                 <th className="text-left px-2 py-1">is Adult</th>
+                <th className="text-left px-2 py-1">Rejected Count</th>
                 <th className="text-left px-2 py-1">View</th>
               </tr>
             </thead>
@@ -118,6 +120,7 @@ const page = () => {
                   </td>
                   <td className="px-2 py-1">{e.CategoryName}</td>
                   <td className="px-2 py-1">{e.isAdult}</td>
+                  <td className="px-2 py-1">{e.RejectCount}</td>
                   <td className="px-2 py-1">
                     <Image
                       className="cursor-pointer"

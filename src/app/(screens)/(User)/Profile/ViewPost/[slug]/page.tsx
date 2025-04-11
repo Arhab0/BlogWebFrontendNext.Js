@@ -21,6 +21,7 @@ interface Record {
   IsActive: boolean;
   IsApproved: boolean;
   userId: number;
+  RejectCount: number;
 }
 const page = () => {
   const router = useRouter();
@@ -126,53 +127,59 @@ const page = () => {
               </p>
             </div>
 
-            <div className="flex items-center justify-end md:my-0 my-3">
-              <div>
-                {post?.IsApproved !== false && (
-                  <button
-                    className={`relative inline-flex items-center justify-center p-0.5 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-                  >
-                    <span
-                      className={`relative px-8 py-1 rounded-md transition-all items-center ease-in duration-75 ${
-                        loading
-                          ? "bg-transparent text-white"
-                          : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
-                      }`}
-                      onClick={Submit}
+            {(post?.RejectCount ?? 0) < 2 ? (
+              <div className="flex items-center justify-end md:my-0 my-3">
+                <div>
+                  {post?.IsApproved !== false && (
+                    <button
+                      className={`relative inline-flex items-center justify-center p-0.5 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
                     >
-                      <div className="flex items-center gap-2">
-                        <FiEdit2 />
-                        <p>Edit</p>
-                      </div>
-                    </span>
-                  </button>
-                )}
-              </div>
-              <div>
-                {post?.IsApproved === true ? (
-                  loading ? (
-                    <span className="text-black">
-                      <BladeLoader />
-                    </span>
+                      <span
+                        className={`relative px-8 py-1 rounded-md transition-all items-center ease-in duration-75 ${
+                          loading
+                            ? "bg-transparent text-white"
+                            : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
+                        }`}
+                        onClick={Submit}
+                      >
+                        <div className="flex items-center gap-2">
+                          <FiEdit2 />
+                          <p>Edit</p>
+                        </div>
+                      </span>
+                    </button>
+                  )}
+                </div>
+                <div>
+                  {post?.IsApproved === true ? (
+                    loading ? (
+                      <span className="text-black">
+                        <BladeLoader />
+                      </span>
+                    ) : (
+                      <Dropdown
+                        placeHolder="Categories"
+                        name="selectedOption"
+                        options={options}
+                        activeId={selectedOption}
+                        handleDropdownChange={(n, v: any) => {
+                          setSelectedOption(v);
+                          setStatusChanged("true");
+                        }}
+                      />
+                    )
+                  ) : post?.IsApproved === null ? (
+                    <span className="text-yellow-700 font-bold">Pending</span>
                   ) : (
-                    <Dropdown
-                      placeHolder="Categories"
-                      name="selectedOption"
-                      options={options}
-                      activeId={selectedOption}
-                      handleDropdownChange={(n, v: any) => {
-                        setSelectedOption(v);
-                        setStatusChanged("true");
-                      }}
-                    />
-                  )
-                ) : post?.IsApproved === null ? (
-                  <span className="text-yellow-700 font-bold">Pending</span>
-                ) : (
-                  <span className="text-red-700 font-bold">Rejected</span>
-                )}
+                    <span className="text-red-700 font-bold">Rejected</span>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              <p className="text-red-700 font-bold">
+                Note: Can't update this post. This post has been rejected twice
+              </p>
+            )}
           </div>
           <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
           <div

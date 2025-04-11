@@ -14,11 +14,13 @@ export const menus: Menus = {
     { label: "All Post", path: "/Profile/AllPosts"},
     { label: "Watch Later", path: "/Profile/WatchLater"},
     { label: "History", path: "/Profile/History"},
+    { label: "Rejected Post", path: "/Profile/RejectedPost"},
   ],
   DashBoard:[
     {label:"DashBoard", path:"/DashBoard"},
     {label:"Posts", path:"/DashBoard/Posts"},
     {label:"Users", path:"/DashBoard/Users"},
     {label:"Post Requests", path:"/DashBoard/PostRequest"},
+    {label:"ReSubmitted Posts", path:"/DashBoard/ReSubmittedPosts"},
   ]
 };
