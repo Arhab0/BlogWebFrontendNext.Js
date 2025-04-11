@@ -24,13 +24,13 @@ const page = () => {
   const [searchEntry, setSearchEntry] = useState("");
   const router = useRouter();
   const helper = useHelper();
-  const [posts, setPosts] = useState<Records[]>([]); // State for the filtered posts
-  const [originalPosts, setOriginalPosts] = useState<Records[]>([]); // State for the original unfiltered posts
+  const [posts, setPosts] = useState<Records[]>([]);
+  const [originalPosts, setOriginalPosts] = useState<Records[]>([]);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [category, setCategory] = useState([{ value: 0, label: "All Posts" }]); // Adding "All Posts"
+  const [category, setCategory] = useState([{ value: 0, label: "All Posts" }]);
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   const postsPerPage = 12;
 
@@ -47,18 +47,18 @@ const page = () => {
   }, [currentPage]);
 
   const fetchData = async () => {
-    setLoading(true); // Set loading to true when fetching data
+    setLoading(true);
     helper.xhr
       .Get("/Posts/GetPosts")
       .then((res) => {
         setPosts(res);
-        setOriginalPosts(res); // Store the unfiltered posts
+        setOriginalPosts(res);
       })
       .catch((err) => {
         setError("Failed to fetch posts");
       })
       .finally(() => {
-        setLoading(false); // Set loading to false once the API call completes
+        setLoading(false);
       });
   };
 
@@ -67,7 +67,7 @@ const page = () => {
       .Get("/Posts/GetCategories")
       .then((res) => {
         setCategory([
-          { value: 0, label: "All Posts" }, // Adding "All Posts" option
+          { value: 0, label: "All Posts" },
           ...(res.category as any[]).map((D: any) => {
             return {
               value: D.Id,
@@ -88,7 +88,6 @@ const page = () => {
   function SearchByKeyword() {
     let filtered = [...originalPosts];
 
-    // Filter by search entry
     if (searchEntry.trim() !== "") {
       filtered = filtered.filter((element) =>
         Object.values(element).some((value) =>
@@ -97,7 +96,6 @@ const page = () => {
       );
     }
 
-    // If a category is selected and it's not "All Posts", filter by categoryId
     if (selectedCategory !== 0) {
       filtered = filtered.filter(
         (element) => element.categoryId === selectedCategory
@@ -105,7 +103,7 @@ const page = () => {
     }
 
     setPosts(filtered);
-    setCurrentPage(1); // Reset to the first page after filtering
+    setCurrentPage(1);
   }
 
   const getText = (html: any) => {
