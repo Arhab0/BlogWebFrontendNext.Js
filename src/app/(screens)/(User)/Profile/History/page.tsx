@@ -38,9 +38,7 @@ const page = () => {
   return (
     <div className="min-h-screen py-5 w-full px-4">
       {loading ? (
-        <div className="text-center text-gray-500 text-lg font-medium">
-          Loading...
-        </div>
+        <div className="loader"></div>
       ) : posts.length === 0 ? (
         <div className="text-center text-gray-600 text-lg font-medium">
           No history "🧐"

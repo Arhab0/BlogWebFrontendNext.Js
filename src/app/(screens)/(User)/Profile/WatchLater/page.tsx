@@ -37,7 +37,7 @@ const page = () => {
   return (
     <div>
       {loading ? (
-        <h1 className="text-5xl font-semibold text-center">Fetching data...</h1>
+        <div className="loader"></div>
       ) : posts.length === 0 ? (
         <h1 className="text-5xl font-semibold text-center">
           No post for watch later 🙁

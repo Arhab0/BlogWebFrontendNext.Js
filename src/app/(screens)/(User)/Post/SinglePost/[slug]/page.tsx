@@ -120,7 +120,7 @@ const page = () => {
     <>
       <Header />
       {loading ? (
-        <h1 className="text-5xl font-semibold text-center">Fetching data...</h1>
+        <div className="loader"></div>
       ) : (
         <div className="px-6 py-10">
           <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />

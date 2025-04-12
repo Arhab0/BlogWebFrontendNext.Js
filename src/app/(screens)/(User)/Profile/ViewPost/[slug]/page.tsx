@@ -100,9 +100,7 @@ const page = () => {
   return (
     <>
       {dataLoading ? (
-        <div className="text-center text-gray-500 font-bold text-lg">
-          Fetching Data...
-        </div>
+        <div className="loader"></div>
       ) : (
         <div className="min-h-screen py-5 w-full px-4">
           <p className="mb-4 mt-2">
