@@ -71,6 +71,7 @@ const Login = () => {
         }
       })
       .catch((err) => {
+        localStorage.clear();
         toast.error("User not found!", {
           position: "top-right",
           autoClose: 5000,
@@ -91,26 +92,55 @@ const Login = () => {
     <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
       <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
       {showRejectModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">
-              Reason for DeActivation
-            </h2>
-            <textarea
-              className="w-full border p-2 rounded-md min-h-[120px]"
-              placeholder="Type your reason here..."
-              value={deActivationReason}
-              disabled={true}
-            />
-            <div className="flex justify-end mt-4 gap-3">
-              <button
-                onClick={() => {
-                  setShowRejectModal(false);
-                }}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                Ok
-              </button>
+        <div
+          tabIndex={-1}
+          aria-hidden={!showRejectModal}
+          className="fixed top-0 left-0 right-0 z-50 flex justify-center items-center w-full min-h-screen overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 px-2"
+        >
+          <div className="relative w-full px-4 sm:px-6 max-w-md sm:max-w-xl md:max-w-2xl max-h-full">
+            <div className="relative bg-[#e5e5e5] rounded-lg shadow-sm max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-300">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+                  Reason For DeActivation
+                </h3>
+                <button
+                  onClick={() => setShowRejectModal(false)}
+                  className="text-gray-400 bg-transparent hover:bg-gray-400 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center hover:text-white"
+                >
+                  <svg
+                    className="w-3 h-3"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                    />
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+
+              <div className="p-4 md:p-5 space-y-4">
+                <p className="text-base leading-relaxed text-black break-words">
+                  {deActivationReason}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end p-4 md:p-5 border-t border-gray-300 rounded-b">
+                <button className="relative inline-flex items-center w-full sm:w-auto justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300">
+                  <span
+                    className="relative px-4 py-2 rounded-md w-full text-center bg-white text-black group-hover:bg-transparent group-hover:text-white"
+                    onClick={() => setShowRejectModal(false)}
+                  >
+                    I accept
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
