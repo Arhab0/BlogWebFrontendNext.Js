@@ -9,6 +9,8 @@ import useHelper from "../../../../../../Helper/helper";
 import moment from "moment";
 import { OPTIONS } from "@/app/lib/type";
 import SearchInputTag from "@/app/utils/components/SearchInputTag/SearchInputTag";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Records {
   Id: number;
@@ -22,17 +24,17 @@ interface Records {
   PhoneNo: string;
   PostCount: number;
   Email: string;
+  RejectCount: number;
 }
 
 const page = () => {
   const helper = useHelper();
-  const router = useRouter();
   const [options, setOptions] = useState([
     { label: "Active", value: "Active" },
     { label: "Not Active", value: "Not Active" },
   ]);
   const [selectedUserStatus, setSelectUserStatus] = useState<string>("");
-
+  const [isStatusChanged, setIsStatusChanged] = useState<string>("null");
   const [searchEntry, setSearchEntry] = useState<string>("");
   const [result, setResult] = useState<Records[]>([]);
   const [mappedData, setMappedData] = useState<Records[]>([]);
@@ -44,6 +46,13 @@ const page = () => {
   const currentPosts = mappedData.slice(indexOfFirstPost, indexOfLastPost);
   const totalPages = Math.ceil(mappedData.length / postsPerPage);
 
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [changeUserActiveStatus, setChangeUserActiveStatus] = useState({
+    id: 0,
+    reason: "",
+    status: false,
+  });
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -51,6 +60,42 @@ const page = () => {
   useEffect(() => {
     FetchData();
   }, []);
+
+  useEffect(() => {
+    if (isStatusChanged !== "null") {
+      changeUserStatus();
+    }
+  }, [isStatusChanged]);
+
+  function changeUserStatus() {
+    helper.xhr
+      .Post(
+        "/Admin/ChangeUserActiveStatus",
+        helper.ConvertToFormData({
+          id: changeUserActiveStatus.id,
+          status: changeUserActiveStatus.status,
+          reasonForDeactivation: changeUserActiveStatus.reason,
+        })
+      )
+      .then((res) => {})
+      .catch((err) => {})
+      .finally(() => {
+        toast.success("Active status of user changed", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setShowRejectModal(false);
+        setChangeUserActiveStatus({ id: 0, status: false, reason: "" });
+        setIsStatusChanged("null");
+        FetchData();
+      });
+  }
 
   useEffect(() => {
     if (result.length > 0) {
@@ -91,6 +136,55 @@ const page = () => {
 
   return (
     <div className="font-alata flex-1 h-full cursor-default">
+      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4">Reason for Rejection</h2>
+            <textarea
+              className="w-full border p-2 rounded-md min-h-[120px]"
+              placeholder="Type your reason here..."
+              value={changeUserActiveStatus.reason}
+              onChange={(e) =>
+                setChangeUserActiveStatus({
+                  ...changeUserActiveStatus,
+                  reason: e.target.value,
+                  status: false,
+                })
+              }
+            />
+            <div className="flex justify-end mt-4 gap-3">
+              <button
+                onClick={() => {
+                  setChangeUserActiveStatus({
+                    id: 0,
+                    reason: "",
+                    status: false,
+                  });
+                  setIsStatusChanged("null");
+                  setShowRejectModal(false);
+                }}
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setChangeUserActiveStatus({
+                    ...changeUserActiveStatus,
+                    status: false,
+                  });
+                  setIsStatusChanged("false");
+                  setShowRejectModal(false);
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex gap-4 items-center flex-wrap">
         <div className="w-full md:w-1/4 bg-transparent">
           <SearchInputTag
@@ -131,7 +225,9 @@ const page = () => {
                 <th className="text-left px-2 py-1">State</th>
                 <th className="text-left px-2 py-1">City</th>
                 <th className="text-left px-2 py-1">Total Post</th>
+                <th className="text-left px-2 py-1">Rejected Post</th>
                 <th className="text-left px-2 py-1">Active Status</th>
+                <th className="text-left px-2 py-1">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -145,11 +241,42 @@ const page = () => {
                   <td className="px-2 py-1">{e.State}</td>
                   <td className="px-2 py-1">{e.City}</td>
                   <td className="px-2 py-1">{e.PostCount}</td>
+                  <td className="px-2 py-1">{e.RejectCount}</td>
                   <td className="px-2 py-1 font-semibold">
                     {e.IsActive ? (
                       <p className="text-green-700">Active</p>
                     ) : (
                       <p className="text-red-700">Not Active</p>
+                    )}
+                  </td>
+                  <td className="px-2 py-1 font-semibold">
+                    {e.IsActive ? (
+                      <p
+                        className="text-red-700 hover:underline cursor-pointer"
+                        onClick={() => {
+                          setChangeUserActiveStatus({
+                            ...changeUserActiveStatus,
+                            id: e.Id,
+                          });
+                          setShowRejectModal(true);
+                        }}
+                      >
+                        De-Activate
+                      </p>
+                    ) : (
+                      <p
+                        className="text-green-700 hover:underline cursor-pointer"
+                        onClick={() => {
+                          setChangeUserActiveStatus({
+                            id: e.Id,
+                            status: true,
+                            reason: "",
+                          });
+                          setIsStatusChanged("true");
+                        }}
+                      >
+                        Activate
+                      </p>
                     )}
                   </td>
                 </tr>
