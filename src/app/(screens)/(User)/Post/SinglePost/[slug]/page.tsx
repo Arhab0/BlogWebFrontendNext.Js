@@ -14,6 +14,7 @@ import WatchedLater from "../../../../../../../public/assets/WatchedLater.svg";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CommentSection from "@/app/utils/components/Comments/CommentSection";
 
 interface Record {
   postId: number;
@@ -132,7 +133,7 @@ const page = () => {
                     src={`https://localhost:44385/${post?.postImg}`}
                     alt=""
                   />
-                  <div className="flex items-center justify-between flex-">
+                  <div className="flex items-center justify-between flex-wrap">
                     <div className="flex items-center gap-4 mt-3">
                       {post?.userPhoto ? (
                         <img
@@ -152,7 +153,7 @@ const page = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:mt-0 mt-3 ">
                       {isWatchLater == true ? (
                         <div className="flex items-center gap-2">
                           <p className="text-gray-600">Remove from</p>
@@ -188,29 +189,17 @@ const page = () => {
                   </div>
                   <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
                   <div
-                    className="md:text-xl text-lg post-description overflow-x-hidden overflow-y-auto whitespace-pre-wrap break-words text-justify"
+                    className="md:text-lg sm:text-base text-sm post-description overflow-x-hidden overflow-y-auto whitespace-pre-wrap break-words text-justify"
                     dangerouslySetInnerHTML={{
                       __html: post?.Description || "",
                     }}
                   />
                 </div>
-                {/* Button to download the post as a PDF */}
-                {/* <div className="flex justify-center mt-6">
-                  <button
-                    className={`relative inline-flex items-center w-1/2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-                  >
-                    <span
-                      className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
-                        loading
-                          ? "bg-transparent text-white"
-                          : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
-                      }`}
-                      onClick={downloadPDF}
-                    >
-                      {pdfLoading ? "Downloading..." : "Download as PDF"}
-                    </span>
-                  </button>
-                </div> */}
+
+                <CommentSection
+                  postId={postId}
+                  loggedInUserId={parseInt(helper.getData("UserId"))}
+                />
               </div>
 
               <div className="md:w-[30%] w-full md:-mt-6">

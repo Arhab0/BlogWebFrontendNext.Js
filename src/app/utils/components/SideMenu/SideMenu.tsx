@@ -15,10 +15,20 @@ const SideMenu = () => {
   const pathname = usePathname();
   const [isOpened, setIsOpened] = useState(true);
 
-  const profileMenus = menus.DashBoard.map((item) => ({
-    ...item,
-    isActive: pathname === item.path,
-  }));
+  var MenuToMap: any[] = [];
+  if (helper.getData("RoleId") === "1") {
+    const profileMenus = menus.DashBoard.map((item) => ({
+      ...item,
+      isActive: pathname === item.path,
+    }));
+    MenuToMap = profileMenus;
+  } else {
+    const profileMenus = menus.Profile.map((item) => ({
+      ...item,
+      isActive: pathname === item.path,
+    }));
+    MenuToMap = profileMenus;
+  }
 
   return (
     <div
@@ -29,7 +39,7 @@ const SideMenu = () => {
       }`}
     >
       <div className="flex flex-col">
-        {profileMenus.map((item, index) => (
+        {MenuToMap.map((item, index) => (
           <Link
             href={item.path}
             key={index}
