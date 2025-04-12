@@ -9,7 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState({ isError: false, Message: "" });
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [deActivationReason, setDeActivationReason] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -49,23 +50,27 @@ const Login = () => {
       )
       .then((res) => {
         console.log(res);
-        helper.storeData("token", res.token);
-        const fullName =
-          (res.user.FirstName || "") + " " + (res.user.LastName || "");
-        helper.storeData("email", res.user.Email);
-        helper.storeData("userName", fullName);
-        helper.storeData("UserId", res.user.Id);
-        helper.storeData("RoleId", res.user.RoleId);
-        helper.storeData("ProfilePhoto", res.user.ProfilePic);
-        if (res.user.RoleId === 1) {
-          router.push("/DashBoard");
+
+        if (res.message) {
+          setDeActivationReason(res.message);
+          setShowRejectModal(true);
         } else {
-          router.push("/Home");
+          helper.storeData("token", res.token);
+          const fullName =
+            (res.user.FirstName || "") + " " + (res.user.LastName || "");
+          helper.storeData("email", res.user.Email);
+          helper.storeData("userName", fullName);
+          helper.storeData("UserId", res.user.Id);
+          helper.storeData("RoleId", res.user.RoleId);
+          helper.storeData("ProfilePhoto", res.user.ProfilePic);
+          if (res.user.RoleId === 1) {
+            router.push("/DashBoard");
+          } else {
+            router.push("/Home");
+          }
         }
       })
       .catch((err) => {
-        // console.log(err);
-        // setErrors((prev) => ({ ...prev, password: "User not found!" }));
         toast.error("User not found!", {
           position: "top-right",
           autoClose: 5000,
@@ -85,6 +90,31 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
       <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4">
+              Reason for DeActivation
+            </h2>
+            <textarea
+              className="w-full border p-2 rounded-md min-h-[120px]"
+              placeholder="Type your reason here..."
+              value={deActivationReason}
+              disabled={true}
+            />
+            <div className="flex justify-end mt-4 gap-3">
+              <button
+                onClick={() => {
+                  setShowRejectModal(false);
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div
         className="flex-1 text-center hidden lg:flex items-center justify-center"
         style={{ background: " radial-gradient(#6cb6eb, #2734c5)" }}
