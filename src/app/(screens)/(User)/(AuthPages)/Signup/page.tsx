@@ -77,11 +77,11 @@ const page = () => {
       helper.xhr
         .Post("/Auth/CreateUser", helper.ConvertToFormData({ user, file }))
         .then((res) => {
-          // console.log(res);
+          // //console.log(res);
           // router.push("/Home");
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
           toast.success("Unable to create the user", {
             position: "top-right",
             autoClose: 5000,
@@ -108,7 +108,7 @@ const page = () => {
           });
           router.push("/");
         });
-      console.log(user, file);
+      //console.log(user, file);
     }
   }
 

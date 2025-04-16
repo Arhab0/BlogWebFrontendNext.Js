@@ -50,7 +50,7 @@ const page = () => {
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         var data = res;
         setPost(data);
       })
@@ -80,7 +80,7 @@ const page = () => {
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        // console.log(res);
+        // //console.log(res);
         // var data = res;
         setIsWatchLater(res.isWatchLater);
       })
@@ -97,7 +97,7 @@ const page = () => {
         helper.ConvertToFormData({ id: postId, check: status })
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
       })
       .catch((err) => {
         toast.error(err, {

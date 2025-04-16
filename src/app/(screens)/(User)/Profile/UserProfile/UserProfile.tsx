@@ -74,7 +74,7 @@ const UserProfile = () => {
     helper.xhr
       .Get("/Profile/GetUserInfo")
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setUser({ ...res, Dob: res.Dob.split("T")[0], Password: "" });
         setSelectedImage(res.ProfilePic);
       })
@@ -101,11 +101,11 @@ const UserProfile = () => {
           helper.ConvertToFormData({ updatedUser, file })
         )
         .then((res) => {
-          // console.log(res);
+          // //console.log(res);
           // router.push("/Home");
         })
         .catch((err) => {
-          // console.log(err);
+          // //console.log(err);
           toast.error("Unable to update the user", {
             position: "top-right",
             autoClose: 5000,

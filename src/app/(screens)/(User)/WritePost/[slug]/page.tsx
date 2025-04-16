@@ -64,7 +64,7 @@ const CreatePostPage = () => {
   }
 
   useEffect(() => {
-    console.log("post obj", post);
+    //console.log("post obj", post);
   }, [post]);
 
   const onChange = (content: string) => {
@@ -102,7 +102,7 @@ const CreatePostPage = () => {
         );
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       })
       .finally(() => {});
   };

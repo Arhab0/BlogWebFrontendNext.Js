@@ -127,7 +127,7 @@ const page = () => {
         );
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   };
 

@@ -75,7 +75,7 @@ const page = () => {
         })
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
       })
       .catch((err) => {})
       .finally(() => {

@@ -70,7 +70,7 @@ const page = () => {
         status: selectedOption,
         userid: post?.userId,
       };
-      console.log(obj);
+      //console.log(obj);
       helper.xhr
         .Post(
           "/Profile/ChangePostActiveStatus",
@@ -81,7 +81,7 @@ const page = () => {
           })
         )
         .then((res) => {
-          console.log(res);
+          //console.log(res);
         })
         .catch((err) => {})
         .finally(() => {

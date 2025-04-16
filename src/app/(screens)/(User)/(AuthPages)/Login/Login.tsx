@@ -49,7 +49,7 @@ const Login = () => {
         })
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
 
         if (res.message) {
           setDeActivationReason(res.message);

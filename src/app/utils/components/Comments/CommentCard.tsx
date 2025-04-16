@@ -28,9 +28,6 @@ const CommentCard = ({ comment, loggedInUserId, onCommentUpdated }: Props) => {
       )
       .then(() => onCommentUpdated());
   };
-  useEffect(() => {
-    console.log(comment);
-  }, []);
 
   const handleUpdate = () => {
     if (newText.trim() === "") {

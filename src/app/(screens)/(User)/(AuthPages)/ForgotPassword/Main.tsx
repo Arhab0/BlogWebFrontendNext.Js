@@ -9,7 +9,7 @@ const Main = () => {
 
   function fetchedData(flag: boolean, user: number) {
     setVerified(flag);
-    console.log(user)
+    //console.log(user)
     setUserId(user);
   }
 

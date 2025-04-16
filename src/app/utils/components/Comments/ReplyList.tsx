@@ -25,14 +25,14 @@ const ReplyList = ({
   const helper = useHelper();
 
   const fetchReplies = () => {
-    console.log(postId, commentId);
+    //console.log(postId, commentId);
     helper.xhr
       .Get(
         "/Comment/GetRepliedComments",
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        console.log("replies", res);
+        //console.log("replies", res);
         setReplies(res.filter((r: any) => r.RepliedCommentId === commentId));
       });
   };
