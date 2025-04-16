@@ -442,7 +442,7 @@ const CreatePostPage = () => {
                 </span>
               </button>
             </div>
-            <div className="bg-white">
+            <div className="bg-white p-6">
               <div className="bg-white rounded-2xl mb-2">
                 <h3 className="text-xl font-semibold mb-4 text-gray-800">
                   Is Adult

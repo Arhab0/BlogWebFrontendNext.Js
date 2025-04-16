@@ -11,7 +11,6 @@ interface Props {
 }
 
 const ApprovedView = ({ userId }: Props) => {
-  console.log(userId);
   const router = useRouter();
   const [newPass, setNewPass] = useState("");
   const [renewPass, setReNewPass] = useState("");
