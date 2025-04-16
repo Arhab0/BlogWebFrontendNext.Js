@@ -29,6 +29,7 @@ const InitialView = ({ moveForward }: Props) => {
     setTimer(10);
   }
   function Submit() {
+    // console.log(userId);
     if (Date.now() < codeSentTime) {
       setLoading(true);
       setTimeout(() => {
@@ -72,36 +73,12 @@ const InitialView = ({ moveForward }: Props) => {
 
   const forgetPassword = () => {
     setLoading(true);
-    // helper.xhr
-    //   .Get(
-    //     `/Users/ForgotPassword`,
-    //     helper.GetURLParamString({ emailAddress: email }).toString()
-    //   )
-    //   .then((res: any) => {
-    //     if (!isNaN(Number(res.code))) {
-    //       setRestoredPin(String(res.code));
-    //       setUserId(res.userid);
-    //       setCodeSentTime(Date.now() + 10 * 60 * 1000);
-    //       setTimer(10 * 60);
-    //       setCodeSent(true);
-    //     } else {
-    //       setError(res.code);
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     // setError(e);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+
     fetch(`https://localhost:44385/Auth/ForgotPassword?emailAddress=${email}`, {
       method: "GET",
-      // headers: { Authorization: "Bearer " + helper.getData("token") },
     })
       .then(async (response: any) => {
         var res = await response.json();
-        // console.log(res)
         if (!isNaN(Number(res.code))) {
           setRestoredPin(String(res.code));
           setUserId(res.userid);
@@ -114,7 +91,6 @@ const InitialView = ({ moveForward }: Props) => {
       })
       .catch((e) => {
         console.log(e);
-        // setError(e);
       })
       .finally(() => {
         setLoading(false);
@@ -177,23 +153,35 @@ const InitialView = ({ moveForward }: Props) => {
       <div className="mt-5">
         {!codeSent ? (
           <button
+            className={`relative inline-flex cursor-pointer items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             onClick={forgetPassword}
             disabled={loading || email == ""}
-            className={`btn rounded text-sm flex justify-center items-center text-black bg-themeColor w-full leading-4 font-alata tex p-3 ${
-              !loading ? "cursor-pointer" : "cursor-progress"
-            }`}
           >
-            {loading ? <BladeLoader /> : "Send Verification Code"}
+            <span
+              className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
+                loading
+                  ? "bg-transparent text-white"
+                  : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
+              }`}
+            >
+              {loading ? <BladeLoader /> : "Send Verification Code"}
+            </span>
           </button>
         ) : (
           <button
+            className={`relative inline-flex cursor-pointer items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             onClick={Submit}
             disabled={loading || email == ""}
-            className={`btn rounded text-sm flex justify-center items-center text-black bg-themeColor w-full leading-4 font-alata tex p-3 ${
-              !loading ? "cursor-pointer" : "cursor-progress"
-            }`}
           >
-            {loading ? <BladeLoader /> : "Submit"}
+            <span
+              className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
+                loading
+                  ? "bg-transparent text-white"
+                  : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
+              }`}
+            >
+              {loading ? <BladeLoader /> : "Submit"}
+            </span>
           </button>
         )}
       </div>

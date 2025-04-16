@@ -11,6 +11,7 @@ interface Props {
 }
 
 const ApprovedView = ({ userId }: Props) => {
+  console.log(userId);
   const router = useRouter();
   const [newPass, setNewPass] = useState("");
   const [renewPass, setReNewPass] = useState("");
@@ -27,8 +28,8 @@ const ApprovedView = ({ userId }: Props) => {
       setLoading(true);
       helper.xhr
         .Post(
-          `/Users/CreateNewPassword`,
-          helper.ConvertToFormData({ password: newPass, checkerId: userId })
+          `/Auth/CreateNewPassword`,
+          helper.ConvertToFormData({ password: newPass, userId: userId })
         )
         .then((res) => {
           setLoading(false);
@@ -89,7 +90,7 @@ const ApprovedView = ({ userId }: Props) => {
         />
       </div>
       <div className="mt-5">
-        <button
+        {/* <button
           onClick={() => {
             newPassword();
           }}
@@ -99,6 +100,23 @@ const ApprovedView = ({ userId }: Props) => {
           }`}
         >
           {loading ? <BladeLoader /> : "Confirm"}
+        </button> */}
+        <button
+          className={`relative inline-flex cursor-pointer items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+          onClick={() => {
+            newPassword();
+          }}
+          disabled={loading}
+        >
+          <span
+            className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
+              loading
+                ? "bg-transparent text-white"
+                : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
+            }`}
+          >
+            {loading ? <BladeLoader /> : "Confirm"}
+          </span>
         </button>
       </div>
       <p className="text-xs text-red-900 text-center mt-2">{error}</p>
