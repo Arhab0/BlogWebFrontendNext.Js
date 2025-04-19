@@ -14,12 +14,14 @@ const PostStatusChart = ({ data }: { data: any }) => {
     { name: "Active", value: data?.ActivePosts || 0 },
     { name: "Rejected", value: data?.RejectedPosts || 0 },
     { name: "Pending", value: data?.PendingPosts || 0 },
+    { name: "ReSubmitted Posts", value: data?.ReSubmittedPosts || 0 },
   ];
 
   const barColors = {
-    Active: "#10b981",   // green
-    Pending: "#f59e0b",  // amber
+    Active: "#10b981", // green
+    Pending: "#f59e0b", // amber
     Rejected: "#ef4444", // red
+    Resubmitted: "#f97316", // orange
   };
 
   return (
@@ -36,7 +38,10 @@ const PostStatusChart = ({ data }: { data: any }) => {
           isAnimationActive={false}
         >
           {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={barColors[entry.name as keyof typeof barColors]} />
+            <Cell
+              key={`cell-${index}`}
+              fill={barColors[entry.name as keyof typeof barColors]}
+            />
           ))}
         </Bar>
       </BarChart>
