@@ -69,7 +69,9 @@ const page = () => {
                 {item.Title}
               </h5>
               <p className="text-base text-gray-700 line-clamp-3">
-                {getText(item.Description) || "No description available"}...
+                {getText(item.Description).substring(0, 50) ||
+                  "No description available"}
+                ...
               </p>
 
               <div className="flex justify-between items-center mt-4 text-sm font-medium">
