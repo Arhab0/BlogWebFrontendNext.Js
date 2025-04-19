@@ -39,7 +39,9 @@ const CommentSection = ({ postId, loggedInUserId }: Props) => {
 
   return (
     <div className="mt-12">
-      <h2 className="text-xl font-semibold mb-4">Comments</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Comments ( {comments.length} )
+      </h2>
       <CommentForm postId={postId} onCommentAdded={fetchComments} />
       <div className="space-y-6 mt-6">
         {comments.map((comment) => (
