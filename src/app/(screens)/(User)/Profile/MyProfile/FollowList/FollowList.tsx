@@ -88,7 +88,12 @@ const page = ({ FollowType }: PageProps) => {
                     className="w-14 h-14 object-cover rounded-full shadow-sm"
                   />
                   <div className="flex-1">
-                    <h2 className="text-xl font-semibold text-gray-800 transition-colors duration-200 cursor-pointer">
+                    <h2
+                      className="text-xl font-semibold text-gray-800 transition-colors duration-200 cursor-pointer"
+                      onClick={() => {
+                        router.push(`UserProfile/${item.UserId}`);
+                      }}
+                    >
                       {item.UserName}
                     </h2>
                   </div>

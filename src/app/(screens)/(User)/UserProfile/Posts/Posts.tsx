@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import useHelper from "../../../../../../../Helper/helper";
+import useHelper from "../../../../../../Helper/helper";
 
 interface Records {
   Id: number;
@@ -14,9 +14,10 @@ interface Records {
 }
 type PageProps = {
   ViewMode: string;
+  userId: number;
 };
 
-const page = ({ ViewMode }: PageProps) => {
+const page = ({ ViewMode, userId }: PageProps) => {
   const router = useRouter();
   const helper = useHelper();
   const [posts, setPosts] = useState<Records[]>([]);
@@ -26,6 +27,7 @@ const page = ({ ViewMode }: PageProps) => {
     check: false,
     message: "",
   });
+
   const postsPerPage = 12;
 
   useEffect(() => {
@@ -44,11 +46,10 @@ const page = ({ ViewMode }: PageProps) => {
     helper.xhr
       .Get(
         "/Profile/GetAllPostOfUser",
-        helper
-          .GetURLParamString({ id: parseInt(helper.getData("UserId")) })
-          .toString()
+        helper.GetURLParamString({ id: userId }).toString()
       )
       .then((res) => {
+        console.log(res);
         if (Array.isArray(res)) {
           setPosts(res);
         } else {
@@ -84,7 +85,7 @@ const page = ({ ViewMode }: PageProps) => {
         <>
           {currentPosts.length === 0 ? (
             <div className="text-center text-gray-600 mt-10">
-              You havn't post anything yet
+              {hasPost.message}
             </div>
           ) : (
             <div className="max-w-7xl mx-auto">
@@ -94,9 +95,9 @@ const page = ({ ViewMode }: PageProps) => {
                     <div
                       className="mb-12"
                       key={post.Id}
-                      onClick={() =>
-                        router.push(`/Profile/ViewPost/${post.Id}`)
-                      }
+                      onClick={() => {
+                        router.push(`/Post/SinglePost/${post.Id}`);
+                      }}
                     >
                       <div className={`flex gap-8 items-center`}>
                         <div className="flex-shrink-0 cursor-pointer transition-transform duration-300 hover:scale-95">
