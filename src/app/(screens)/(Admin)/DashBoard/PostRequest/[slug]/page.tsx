@@ -136,11 +136,19 @@ const page = () => {
             </span>
           </p>
           <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+          {/* <div className="w-full aspect-[16/9]">
+            <img
+              className="w-full h-full object-cover rounded-md"
+              src={`https://localhost:44385/${post?.postImg}`}
+              alt="Post Image"
+            />
+          </div> */}
           <img
-            className="w-full md:h-auto rounded-md object-cover"
+            className="w-full max-h-[45rem] object-fill rounded-md"
             src={`https://localhost:44385/${post?.postImg}`}
-            alt=""
+            alt="Post Image"
           />
+
           <div className="flex items-center justify-between flex-wrap md:my-2 my-3">
             <div className="flex items-center gap-x-2">
               <CiCalendar />
