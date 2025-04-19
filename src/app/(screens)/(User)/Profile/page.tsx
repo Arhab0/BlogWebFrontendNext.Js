@@ -1,10 +1,12 @@
-import React from 'react'
-import UserProfile from './UserProfile/UserProfile'
+import React from "react";
+import MyProfile from "./MyProfile/MyProfile";
 
 const page = () => {
   return (
-    <div><UserProfile/></div>
-  )
-}
+    <div>
+      <MyProfile />
+    </div>
+  );
+};
 
-export default page
+export default page;
