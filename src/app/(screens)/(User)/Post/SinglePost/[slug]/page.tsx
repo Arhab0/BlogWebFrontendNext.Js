@@ -32,50 +32,122 @@ interface Record {
 }
 
 const page = () => {
-  const params = useParams();
-  const slug = params?.slug;
+  const { slug } = useParams();
+  const postId = Number(slug);
+  const helper = useHelper();
+  const router = useRouter();
+
+  const [post, setPost] = useState<Record>();
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLLoading] = useState(false);
-  const router = useRouter();
-  const postId = Number(slug);
-  const [post, setPost] = useState<Record>();
-  const helper = useHelper();
 
+  const [isWatchLater, setIsWatchLater] = useState(false);
   const [isWatchLaterChanged, setIsWatchLaterChanged] = useState("null");
   const [status, setStatus] = useState(false);
-  const [isWatchLater, setIsWatchLater] = useState(false);
 
-  const [isFollowChanged, setIsFollowChanged] = useState("null");
-  const [followStatus, setFollowStatus] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [followStatus, setFollowStatus] = useState(false);
+  const [isFollowChanged, setIsFollowChanged] = useState("null");
 
-  const fetchData = async () => {
+  const fetchPost = () => {
     setLoading(true);
     helper.xhr
       .Get(
         "/Posts/GetPostById",
         helper.GetURLParamString({ id: postId }).toString()
       )
+      .then((res) => setPost(res))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  };
+
+  const getFollowData = (userId: number) => {
+    helper.xhr
+      .Get(
+        "/Follow/GetFollowerById",
+        helper.GetURLParamString({ id: userId }).toString()
+      )
       .then((res) => {
-        //console.log(res);
-        var data = res;
-        setPost(data);
+        setIsFollowing(res);
+        setFollowStatus(res);
       })
-      .catch((err) => {})
+      .catch(console.error);
+  };
+
+  const getWatchLaterData = () => {
+    helper.xhr
+      .Get(
+        "/Profile/GetWatahLaterPostById",
+        helper.GetURLParamString({ id: postId }).toString()
+      )
+      .then((res) => {
+        console.log(res);
+        setIsWatchLater(res.isWatchLater);
+      })
+      .catch(console.error);
+  };
+
+  const handleWatchLater = () => {
+    helper.xhr
+      .Post(
+        "/Posts/AddToWatchLater",
+        helper.ConvertToFormData({ id: postId, check: status })
+      )
+      .then(() => setIsWatchLaterChanged("null"))
+      .catch((err) =>
+        toast.error(err, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      )
       .finally(() => {
-        setLoading(false);
+        getWatchLaterData();
       });
   };
 
+  const handleFollowChange = () => {
+    helper.xhr
+      .Post(
+        "/Follow/AddFollow",
+        helper.ConvertToFormData({ id: post?.userId, check: followStatus })
+      )
+      .then(() => getFollowData(post?.userId || 0))
+      .catch((err) =>
+        toast.error(err, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        })
+      )
+      .finally(() => setIsFollowChanged("null"));
+  };
+
   useEffect(() => {
-    fetchData();
-    getWatchLaterData();
-    getFollowData();
+    fetchPost();
   }, [postId]);
+
+  useEffect(() => {
+    if (post?.userId) {
+      getWatchLaterData();
+      getFollowData(post.userId);
+    }
+  }, [post?.userId]);
 
   useEffect(() => {
     if (isWatchLaterChanged !== "null") {
       handleWatchLater();
+      setIsWatchLaterChanged("null");
     }
   }, [isWatchLaterChanged]);
 
@@ -84,93 +156,6 @@ const page = () => {
       handleFollowChange();
     }
   }, [isFollowChanged]);
-
-  const downloadPDF = () => {};
-
-  function getWatchLaterData() {
-    helper.xhr
-      .Get(
-        "/Profile/GetWatahLaterPostById",
-        helper.GetURLParamString({ id: post?.userId }).toString()
-      )
-      .then((res) => {
-        setIsWatchLater(res.isWatchLater);
-      })
-      .catch((err) => {})
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function getFollowData() {
-    helper.xhr
-      .Get(
-        "/Follow/GetFollowerById",
-        helper.GetURLParamString({ id: postId }).toString()
-      )
-      .then((res) => {
-        // console.log(res);
-        setIsFollowing(res);
-        // setFollowStatus(res);
-        // var data = res;
-        // setIsWatchLater(res.isWatchLater);
-      })
-      .catch((err) => {})
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  function handleWatchLater() {
-    helper.xhr
-      .Post(
-        "/Posts/AddToWatchLater",
-        helper.ConvertToFormData({ id: postId, check: status })
-      )
-      .then((res) => {
-        //console.log(res);
-      })
-      .catch((err) => {
-        toast.error(err, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      })
-      .finally(() => {
-        getWatchLaterData();
-      });
-  }
-  function handleFollowChange() {
-    helper.xhr
-      .Post(
-        "/Follow/AddFollow",
-        helper.ConvertToFormData({ id: post?.userId, check: followStatus })
-      )
-      .then((res) => {
-        //console.log(res);
-      })
-      .catch((err) => {
-        toast.error(err, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      })
-      .finally(() => {
-        getFollowData();
-      });
-  }
 
   return (
     <>
@@ -206,31 +191,34 @@ const page = () => {
                             {post?.AuthorName}
                           </p>
 
-                          <div className="flex items-center gap-2">
-                            {isFollowing ? (
-                              <button
-                                className="flex items-center gap-1 text-sm bg-[#e5e5e5] hover:text-gray-800 text-gray-600 p-2 rounded-md transition"
-                                onClick={() => {
-                                  setFollowStatus(false);
-                                  setIsFollowChanged("false");
-                                }}
-                              >
-                                <RiUserUnfollowLine className="w-4 h-4" />
-                                <span>Unfollow</span>
-                              </button>
-                            ) : (
-                              <button
-                                className="flex items-center gap-1 text-sm bg-[#e5e5e5] hover:text-gray-800 text-gray-600 p-2 rounded-md transition"
-                                onClick={() => {
-                                  setFollowStatus(true);
-                                  setIsFollowChanged("true");
-                                }}
-                              >
-                                <RiUserFollowLine className="w-4 h-4" />
-                                <span>Follow</span>
-                              </button>
-                            )}
-                          </div>
+                          {post?.userId !==
+                            parseInt(helper.getData("UserId")) && (
+                            <div className="flex items-center gap-2">
+                              {isFollowing ? (
+                                <button
+                                  className="flex items-center gap-1 text-sm bg-[#e5e5e5] hover:text-gray-800 text-gray-600 px-3 py-1.5 rounded-md transition"
+                                  onClick={() => {
+                                    setFollowStatus(false);
+                                    setIsFollowChanged("false");
+                                  }}
+                                >
+                                  <RiUserUnfollowLine className="w-4 h-4" />
+                                  <span>Unfollow</span>
+                                </button>
+                              ) : (
+                                <button
+                                  className="flex items-center gap-1 text-sm bg-[#e5e5e5] hover:text-gray-800 text-gray-600 px-3 py-1.5 rounded-md transition"
+                                  onClick={() => {
+                                    setFollowStatus(true);
+                                    setIsFollowChanged("true");
+                                  }}
+                                >
+                                  <RiUserFollowLine className="w-4 h-4" />
+                                  <span>Follow</span>
+                                </button>
+                              )}
+                            </div>
+                          )}
                         </div>
 
                         <p className="text-sm">
@@ -238,39 +226,41 @@ const page = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:mt-0 mt-3 ">
-                      {isWatchLater == true ? (
-                        <div className="flex items-center gap-2">
-                          <p className="text-gray-600">Remove from</p>
-                          <Image
-                            src={WatchedLater}
-                            height={20}
-                            width={20}
-                            className="cursor-pointer"
-                            alt="watch later svg"
-                            onClick={() => {
-                              setStatus(false);
-                              setIsWatchLaterChanged("false");
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <p className="text-gray-600">Add to</p>
-                          <Image
-                            src={AddToWatchLater}
-                            height={20}
-                            width={20}
-                            className="cursor-pointer"
-                            alt="watch later svg"
-                            onClick={() => {
-                              setStatus(true);
-                              setIsWatchLaterChanged("true");
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    {post?.userId !== parseInt(helper.getData("UserId")) && (
+                      <div className="flex items-center gap-2 sm:mt-0 mt-3 ">
+                        {isWatchLater == true ? (
+                          <div className="flex items-center gap-2">
+                            <p className="text-gray-600">Remove from</p>
+                            <Image
+                              src={WatchedLater}
+                              height={20}
+                              width={20}
+                              className="cursor-pointer"
+                              alt="watch later svg"
+                              onClick={() => {
+                                setStatus(false);
+                                setIsWatchLaterChanged("false");
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <p className="text-gray-600">Add to</p>
+                            <Image
+                              src={AddToWatchLater}
+                              height={20}
+                              width={20}
+                              className="cursor-pointer"
+                              alt="watch later svg"
+                              onClick={() => {
+                                setStatus(true);
+                                setIsWatchLaterChanged("true");
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
                   <div
