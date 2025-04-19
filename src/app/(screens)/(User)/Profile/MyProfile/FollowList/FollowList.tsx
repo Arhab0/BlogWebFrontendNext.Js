@@ -25,7 +25,7 @@ const page = ({ FollowType }: PageProps) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [FollowType]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -38,21 +38,24 @@ const page = ({ FollowType }: PageProps) => {
         ? "/Follow/GetFollowing"
         : "/Follow/GetFollowers";
 
-    try {
-      const res = await helper.xhr.Get(
+    helper.xhr
+      .Get(
         endpoint,
         helper
           .GetURLParamString({
             id: parseInt(helper.getData("UserId")),
           })
           .toString()
-      );
-      setUsers(res);
-    } catch (err) {
-      console.error("Error fetching users:", err);
-    } finally {
-      setLoading(false);
-    }
+      )
+      .then((res) => {
+        console.log(res);
+        const userList = FollowType === "following" ? res : res.data;
+        setUsers(userList);
+      })
+      .catch((e) => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const indexOfLastPost = currentPage * postsPerPage;
