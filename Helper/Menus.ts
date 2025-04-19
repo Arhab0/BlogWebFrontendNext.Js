@@ -13,7 +13,7 @@ export const menus: Menus = {
     {label:"Home", path:"/Home"},
     { label: "Profile", path: "/Profile" },
     { label: "All Post", path: "/Profile/AllPosts"},
-    { label: "Watch Later", path: "/Profile/WatchLater"},
+    { label: "Read Later", path: "/Profile/WatchLater"},
     { label: "History", path: "/Profile/History"},
     { label: "Rejected Post", path: "/Profile/RejectedPost"},
   ],
