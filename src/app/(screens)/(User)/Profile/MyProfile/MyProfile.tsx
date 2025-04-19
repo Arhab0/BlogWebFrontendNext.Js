@@ -46,21 +46,13 @@ const MyProfile = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    setLoading(true); // optional if you want to show loading
-
     Promise.all([
       helper.xhr.Get("/Profile/GetAllPostOfUser"),
       helper.xhr.Get("/Profile/GetUserInfo"),
     ])
       .then(([postsRes, userInfoRes]) => {
         setPosts(postsRes);
-
-        // Uncomment and modify as needed:
         setUser(userInfoRes);
-        // setSelectedImage(userInfoRes.ProfilePic);
-
-        console.log(userInfoRes);
-        console.log(postsRes);
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
