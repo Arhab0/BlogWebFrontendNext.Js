@@ -76,7 +76,12 @@ const page = () => {
   const fetchData = async () => {
     setDataLoading(true);
     helper.xhr
-      .Get("/Profile/GetUserInfo")
+      .Get(
+        "/Profile/GetUserInfo",
+        helper
+          .GetURLParamString({ id: parseInt(helper.getData("UserId")) })
+          .toString()
+      )
       .then((res) => {
         //console.log(res);
         setUser({ ...res, Dob: res.Dob.split("T")[0], Password: "" });

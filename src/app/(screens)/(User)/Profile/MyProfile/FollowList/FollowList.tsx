@@ -94,7 +94,9 @@ const page = ({ FollowType }: PageProps) => {
             </div>
           ) : (
             <div className="text-center text-gray-600 mt-10">
-              No users found.
+              {currentPosts.length === 0 && FollowType === "following"
+                ? "No Followings"
+                : "No Followers"}
             </div>
           )}
 

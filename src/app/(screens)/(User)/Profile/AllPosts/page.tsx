@@ -21,7 +21,12 @@ const page = () => {
   const fetchData = async () => {
     // setLoading(true);
     helper.xhr
-      .Get("/Profile/GetAllPostOfUser")
+      .Get(
+        "/Profile/GetAllPostOfUser",
+        helper
+          .GetURLParamString({ id: parseInt(helper.getData("UserId")) })
+          .toString()
+      )
       .then((res) => {
         // console.log(res);
         setPosts(res);

@@ -39,7 +39,12 @@ const page = ({ ViewMode }: PageProps) => {
   const fetchData = async () => {
     setLoading(true);
     helper.xhr
-      .Get("/Profile/GetAllPostOfUser")
+      .Get(
+        "/Profile/GetAllPostOfUser",
+        helper
+          .GetURLParamString({ id: parseInt(helper.getData("UserId")) })
+          .toString()
+      )
       .then((res) => {
         setPosts(res);
       })
@@ -71,9 +76,7 @@ const page = ({ ViewMode }: PageProps) => {
       ) : (
         <>
           {currentPosts.length === 0 ? (
-            <div className="text-center text-gray-600 mt-10">
-              No users found.
-            </div>
+            <div className="text-center text-gray-600 mt-10">No posts.</div>
           ) : (
             <div className="max-w-7xl mx-auto">
               {ViewMode === "list" ? (

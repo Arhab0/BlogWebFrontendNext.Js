@@ -47,8 +47,18 @@ const MyProfile = () => {
   const fetchData = async () => {
     setLoading(true);
     Promise.all([
-      helper.xhr.Get("/Profile/GetAllPostOfUser"),
-      helper.xhr.Get("/Profile/GetUserInfo"),
+      helper.xhr.Get(
+        "/Profile/GetAllPostOfUser",
+        helper
+          .GetURLParamString({ id: parseInt(helper.getData("UserId")) })
+          .toString()
+      ),
+      helper.xhr.Get(
+        "/Profile/GetUserInfo",
+        helper
+          .GetURLParamString({ id: parseInt(helper.getData("UserId")) })
+          .toString()
+      ),
     ])
       .then(([postsRes, userInfoRes]) => {
         setPosts(postsRes);
