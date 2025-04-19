@@ -15,6 +15,8 @@ import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CommentSection from "@/app/utils/components/Comments/CommentSection";
+import { RiUserFollowLine } from "react-icons/ri";
+import { RiUserUnfollowLine } from "react-icons/ri";
 
 interface Record {
   postId: number;
@@ -38,9 +40,14 @@ const page = () => {
   const postId = Number(slug);
   const [post, setPost] = useState<Record>();
   const helper = useHelper();
+
   const [isWatchLaterChanged, setIsWatchLaterChanged] = useState("null");
   const [status, setStatus] = useState(false);
   const [isWatchLater, setIsWatchLater] = useState(false);
+
+  const [isFollowChanged, setIsFollowChanged] = useState("null");
+  const [followStatus, setFollowStatus] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -62,7 +69,8 @@ const page = () => {
 
   useEffect(() => {
     fetchData();
-    getData();
+    getWatchLaterData();
+    getFollowData();
   }, [postId]);
 
   useEffect(() => {
@@ -71,18 +79,41 @@ const page = () => {
     }
   }, [isWatchLaterChanged]);
 
+  useEffect(() => {
+    if (isFollowChanged !== "null") {
+      handleFollowChange();
+    }
+  }, [isFollowChanged]);
+
   const downloadPDF = () => {};
 
-  function getData() {
+  function getWatchLaterData() {
     helper.xhr
       .Get(
         "/Profile/GetWatahLaterPostById",
+        helper.GetURLParamString({ id: post?.userId }).toString()
+      )
+      .then((res) => {
+        setIsWatchLater(res.isWatchLater);
+      })
+      .catch((err) => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  function getFollowData() {
+    helper.xhr
+      .Get(
+        "/Follow/GetFollowerById",
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        // //console.log(res);
+        // console.log(res);
+        setIsFollowing(res);
+        // setFollowStatus(res);
         // var data = res;
-        setIsWatchLater(res.isWatchLater);
+        // setIsWatchLater(res.isWatchLater);
       })
       .catch((err) => {})
       .finally(() => {
@@ -112,7 +143,32 @@ const page = () => {
         });
       })
       .finally(() => {
-        getData();
+        getWatchLaterData();
+      });
+  }
+  function handleFollowChange() {
+    helper.xhr
+      .Post(
+        "/Follow/AddFollow",
+        helper.ConvertToFormData({ id: post?.userId, check: followStatus })
+      )
+      .then((res) => {
+        //console.log(res);
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      })
+      .finally(() => {
+        getFollowData();
       });
   }
 
@@ -144,10 +200,39 @@ const page = () => {
                       ) : (
                         <FaUser />
                       )}
-                      <div>
-                        <span className="font-bold text-[20px]">
-                          {post?.AuthorName}
-                        </span>
+                      <div className="flex flex-col">
+                        <div className="flex items-center justify-between flex-wrap gap-4">
+                          <p className="font-semibold text-lg text-gray-800">
+                            {post?.AuthorName}
+                          </p>
+
+                          <div className="flex items-center gap-2">
+                            {isFollowing ? (
+                              <button
+                                className="flex items-center gap-1 text-sm bg-[#e5e5e5] hover:text-gray-800 text-gray-600 p-2 rounded-md transition"
+                                onClick={() => {
+                                  setFollowStatus(false);
+                                  setIsFollowChanged("false");
+                                }}
+                              >
+                                <RiUserUnfollowLine className="w-4 h-4" />
+                                <span>Unfollow</span>
+                              </button>
+                            ) : (
+                              <button
+                                className="flex items-center gap-1 text-sm bg-[#e5e5e5] hover:text-gray-800 text-gray-600 p-2 rounded-md transition"
+                                onClick={() => {
+                                  setFollowStatus(true);
+                                  setIsFollowChanged("true");
+                                }}
+                              >
+                                <RiUserFollowLine className="w-4 h-4" />
+                                <span>Follow</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
                         <p className="text-sm">
                           posted {moment(post?.CreatedAt).fromNow()}
                         </p>
