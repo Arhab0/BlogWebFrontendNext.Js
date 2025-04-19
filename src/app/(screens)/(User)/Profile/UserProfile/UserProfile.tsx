@@ -129,6 +129,7 @@ const UserProfile = () => {
             progress: undefined,
             theme: "light",
           });
+          fetchData();
         });
     }
   }
