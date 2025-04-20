@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/app/utils/components/Header/Header";
 import { useParams, useRouter } from "next/navigation";
+import Modal from "../Modal";
 
 const CreatePostPage = () => {
   const params = useParams();
@@ -38,6 +39,7 @@ const CreatePostPage = () => {
 
   const isNumber = !isNaN(Number(slug));
   const [dataLoading, setDataLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (isNumber) {
@@ -169,17 +171,6 @@ const CreatePostPage = () => {
     helper.xhr
       .Post("/Posts/AddPost", helper.ConvertToFormData({ post, file }))
       .then((res) => {
-        toast.success("Post published successfully!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-
         setPost({
           postId: 0,
           Title: "",
@@ -201,7 +192,8 @@ const CreatePostPage = () => {
       })
       .finally(() => {
         setLoading(false);
-        router.push("/Home");
+        setIsModalOpen(true);
+        // router.push("/Home");
       });
   };
 
@@ -284,19 +276,6 @@ const CreatePostPage = () => {
           progress: undefined,
           theme: "light",
         });
-
-        setPost({
-          postId: 0,
-          Title: "",
-          Description: "",
-          CatId: 0,
-          postImg: "",
-          isAdult: true,
-        });
-        setSelectedImage(null);
-        setFile(null);
-        setSelectedCategory(0);
-        if (fileInputRef.current) fileInputRef.current.value = "";
       })
       .catch((error) => {
         toast.error("Failed to update post. Try again.", {
@@ -306,18 +285,40 @@ const CreatePostPage = () => {
       })
       .finally(() => {
         setLoading(false);
-        router.push("/Profile/AllPosts");
+        router.back();
       });
   };
   useEffect(() => {
     GetCategories();
   }, []);
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setPost({
+      postId: 0,
+      Title: "",
+      Description: "",
+      CatId: 0,
+      postImg: "",
+      isAdult: true,
+    });
+    setSelectedImage(null);
+    setFile(null);
+    setSelectedCategory(0);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    router.back();
+  };
+
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 py-16 px-6 overflow-y-auto">
+      <div
+        className={`min-h-screen bg-gray-50 py-16 px-6 overflow-y-auto ${
+          isModalOpen ? "blur-background" : ""
+        } `}
+      >
         <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+        <Modal isOpen={isModalOpen} onClose={closeModal} />
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
           {/* Main content */}
           <div className="md:col-span-2">
