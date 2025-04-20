@@ -32,7 +32,7 @@ const page = () => {
   const [post, setPost] = useState<Record>();
   const helper = useHelper();
   const [options, setOptions] = useState([
-    { label: "Select Option", value: "" },
+    { label: "Approve / Reject", value: "" },
     { label: "🟢 Approve", value: "true" },
     { label: "🔴 Reject", value: "false" },
   ]);
@@ -176,7 +176,7 @@ const page = () => {
           </div>
           <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
           <div
-            className="md:text-xl text-lg post-description overflow-x-hidden overflow-y-auto whitespace-pre-wrap break-words text-justify"
+            className="prose prose-sm md:prose-base max-w-none overflow-x-hidden overflow-y-auto prose-p:my-2 prose-li:my-1"
             dangerouslySetInnerHTML={{
               __html: post?.Description || "",
             }}

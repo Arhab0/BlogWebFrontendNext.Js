@@ -48,6 +48,7 @@ const page = () => {
       )
       .then((res) => {
         var data = res;
+        console.log(res);
         setPost(data);
         setSelectedOption(data?.IsActive);
       })
@@ -128,7 +129,7 @@ const page = () => {
             {(post?.RejectCount ?? 0) < 2 ? (
               <div className="flex items-center justify-end md:my-0 my-3">
                 <div>
-                  {post?.IsApproved !== false && (
+                  {post?.IsApproved === true && (
                     <button
                       className={`relative inline-flex items-center justify-center p-0.5 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
                     >
@@ -175,13 +176,14 @@ const page = () => {
               </div>
             ) : (
               <p className="text-red-700 font-bold">
-                Note: Can't update this post. This post has been rejected twice
+                Note: Can't update this post again. This post has been rejected
+                twice!
               </p>
             )}
           </div>
           <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
           <div
-            className="md:text-xl text-lg post-description overflow-x-hidden overflow-y-auto whitespace-pre-wrap break-words text-justify"
+            className="prose prose-sm md:prose-base max-w-none overflow-x-hidden overflow-y-auto prose-p:my-2 prose-li:my-1"
             dangerouslySetInnerHTML={{
               __html: post?.Description || "",
             }}

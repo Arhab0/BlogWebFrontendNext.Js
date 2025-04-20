@@ -170,20 +170,7 @@ const CreatePostPage = () => {
 
     helper.xhr
       .Post("/Posts/AddPost", helper.ConvertToFormData({ post, file }))
-      .then((res) => {
-        setPost({
-          postId: 0,
-          Title: "",
-          Description: "",
-          CatId: 0,
-          postImg: "",
-          isAdult: true,
-        });
-        setSelectedImage(null);
-        setFile(null);
-        setSelectedCategory(0);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      })
+      .then((res) => {})
       .catch((error) => {
         toast.error("Failed to publish post. Try again.", {
           position: "top-right",

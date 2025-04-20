@@ -262,9 +262,9 @@ const page = () => {
                       </div>
                     )}
                   </div>
-                  <h1 className="font-bold text-2xl mb-9">{post?.Title}</h1>
+                  <h1 className="font-bold text-2xl my-5">{post?.Title}</h1>
                   <div
-                    className="md:text-lg sm:text-base text-sm post-description overflow-x-hidden overflow-y-auto whitespace-pre-wrap break-words text-justify"
+                    className="prose prose-sm md:prose-base max-w-none overflow-x-hidden overflow-y-auto prose-p:my-2 prose-li:my-1"
                     dangerouslySetInnerHTML={{
                       __html: post?.Description || "",
                     }}
