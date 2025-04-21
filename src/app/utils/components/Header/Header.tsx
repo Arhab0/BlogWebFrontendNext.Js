@@ -179,6 +179,7 @@ const Header = () => {
               <button
                 onClick={() => {
                   setMenuOpen(false);
+                  router.push("/Profile")
                 }}
                 className="w-full text-left px-4 py-2 rounded hover:bg-gray-100"
               >
