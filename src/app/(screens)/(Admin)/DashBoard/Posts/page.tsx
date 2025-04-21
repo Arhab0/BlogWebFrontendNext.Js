@@ -27,10 +27,10 @@ const page = () => {
   const [Categories, setCategories] = useState<OPTIONS[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [options, setOptions] = useState([
-    { label: "Active", value: "Active" },
-    { label: "De-Activate", value: "Not Active" },
-    { label: "Pending", value: "Pending" },
-    { label: "Rejected", value: "Rejected" },
+    { label: "🟢 Active", value: "Active" },
+    { label: "🔴 De-Activate", value: "Not Active" },
+    { label: "🟡 Pending", value: "Pending" },
+    { label: "🔴 Rejected", value: "Rejected" },
   ]);
   const [selectedPostStatus, setSelectedPostStatus] = useState<string>("");
 

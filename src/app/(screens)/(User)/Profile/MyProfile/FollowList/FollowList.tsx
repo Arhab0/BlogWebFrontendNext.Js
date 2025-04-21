@@ -91,7 +91,7 @@ const page = ({ FollowType }: PageProps) => {
                     <h2
                       className="text-xl font-semibold text-gray-800 transition-colors duration-200 cursor-pointer"
                       onClick={() => {
-                        router.push(`UserProfile/${item.UserId}`);
+                        router.push(`UsersProfile/${item.UserId}`);
                       }}
                     >
                       {item.UserName}
