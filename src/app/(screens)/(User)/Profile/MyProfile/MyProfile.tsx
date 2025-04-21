@@ -6,6 +6,7 @@ import { FaUserPen } from "react-icons/fa6";
 import { MdGridView, MdViewList } from "react-icons/md";
 import Posts from "./Posts/Posts";
 import FollowList from "./FollowList/FollowList";
+import { FaUser } from "react-icons/fa";
 
 interface User {
   Id: number;
@@ -82,11 +83,15 @@ const MyProfile = () => {
         <div className="min-h-screen py-5 w-full mx-auto px-4">
           <div className="px-4 py-6 border-b border-gray-300">
             <div className="flex flex-col md:flex-row items-center gap-5 w-full md:mx-auto">
-              <img
-                src={`https://localhost:44385/${user?.ProfilePic}`}
-                className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border border-gray-300"
-                alt="Profile"
-              />
+              {user?.ProfilePic ? (
+                <img
+                  src={`https://localhost:44385/${user?.ProfilePic}`}
+                  className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border border-gray-300"
+                  alt=""
+                />
+              ) : (
+                <FaUser />
+              )}
 
               <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-2">
                 <div className="flex flex-col md:flex-row md:items-center gap-2">

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { FaArrowRight, FaArrowLeft, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import useHelper from "../../../../../../../Helper/helper";
 
@@ -82,11 +82,15 @@ const page = ({ FollowType }: PageProps) => {
                   key={item.UserId}
                   className="flex items-center gap-6 border-b pb-4 transition-all duration-200 px-4 py-2 rounded-md"
                 >
-                  <img
-                    src={`https://localhost:44385/${item.UserProfilePic}`}
-                    alt={"Profile Pic"}
-                    className="w-14 h-14 object-cover rounded-full shadow-sm"
-                  />
+                  {item?.UserProfilePic ? (
+                    <img
+                      src={`https://localhost:44385/${item?.UserProfilePic}`}
+                      className="w-14 h-14 object-cover rounded-full shadow-sm"
+                      alt=""
+                    />
+                  ) : (
+                    <FaUser />
+                  )}
                   <div className="flex-1">
                     <h2
                       className="text-xl font-semibold text-gray-800 transition-colors duration-200 cursor-pointer"
