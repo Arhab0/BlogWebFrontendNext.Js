@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import useHelper from "../../../../../Helper/helper";
+import NotificationBell from "../NotificationBell/NotificationBell";
 
 const Header = () => {
   const router = useRouter();
@@ -38,6 +39,7 @@ const Header = () => {
       </div>
 
       <div className="hidden md:flex items-center space-x-4">
+        <NotificationBell accessToken={helper.getData("token")} />
         <div className="flex gap-2 items-center">
           {helper.getData("token") && (
             <button
@@ -179,7 +181,7 @@ const Header = () => {
               <button
                 onClick={() => {
                   setMenuOpen(false);
-                  router.push("/Profile")
+                  router.push("/Profile");
                 }}
                 className="w-full text-left px-4 py-2 rounded hover:bg-gray-100"
               >
