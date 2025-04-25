@@ -188,14 +188,15 @@ const page = () => {
                       <div className="flex flex-col">
                         <div className="flex items-center justify-between flex-wrap gap-4">
                           <p
-                            className="font-semibold text-lg text-gray-800"
+                            className="font-semibold text-lg text-gray-800 cursor-pointer"
                             onClick={() => {
-                              if(post?.userId === parseInt(helper.getData("UserId")))
-                              {
+                              if (
+                                post?.userId ===
+                                parseInt(helper.getData("UserId"))
+                              ) {
                                 router.push(`/Profile}`);
-                              }
-                              else{
-                                router.push(`UsersProfile/${post?.userId}`);
+                              } else {
+                                router.push(`/UsersProfile/${post?.userId}`);
                               }
                             }}
                           >
