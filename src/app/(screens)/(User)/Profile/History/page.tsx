@@ -49,7 +49,7 @@ const page = () => {
             <div
               key={index}
               className="flex cursor-pointer flex-col justify-between bg-[#F5F5F9] max-w-sm h-auto p-6 border border-gray-200 rounded-lg shadow-sm hover:bg-[#eff0f2]"
-              onClick={() => router.push(`/ViewPost/${item.Id}`)}
+              onClick={() => router.push(`/Post/SinglePost/${item.Id}`)}
             >
               <img
                 src={`https://localhost:44385/${item.postImg}`}
