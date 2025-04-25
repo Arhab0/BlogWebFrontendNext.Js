@@ -81,7 +81,7 @@ const page = () => {
         helper.GetURLParamString({ id: postId }).toString()
       )
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setIsWatchLater(res.isWatchLater);
       })
       .catch(console.error);

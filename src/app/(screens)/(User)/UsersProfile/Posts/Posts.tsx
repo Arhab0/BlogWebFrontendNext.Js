@@ -49,7 +49,7 @@ const page = ({ ViewMode, userId }: PageProps) => {
         helper.GetURLParamString({ id: userId }).toString()
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (Array.isArray(res)) {
           setPosts(res);
         } else {
