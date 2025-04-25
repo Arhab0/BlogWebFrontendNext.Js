@@ -54,9 +54,12 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
       >
         🔔
         {unreadNotifications.length > 0 && (
-          <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full"></span>
+          <span className="absolute top-[4px] right-[1px] min-w-[16px] h-4 px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+            {unreadNotifications.length}
+          </span>
         )}
       </button>
+
       {open && (
         <div className="absolute right-0 mt-2 w-72 bg-white border shadow-lg rounded-lg p-2 max-h-60 overflow-auto z-50">
           {notifications.length === 0 ? (
@@ -67,10 +70,12 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
             mappedNotif.map((note: any, i: number) => (
               <div
                 key={i}
-                className="text-sm p-2 border-b last:border-b-0 font-semibold"
+                className="px-4 py-3 border-b last:border-b-0 hover:bg-gray-50 transition duration-200"
               >
-                <p>{note?.message}</p>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-sm text-gray-800 font-medium">
+                  {note?.message}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
                   {moment(note.timeStamp).fromNow()}
                 </p>
               </div>
