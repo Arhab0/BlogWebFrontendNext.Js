@@ -140,13 +140,63 @@ const page = () => {
       <Header />
       <div className="px-4 py-10 md:px-6 md:py-10">
         <div className="max-w-7xl mx-auto">
-          <span>
-            {error && (
-              <p className="font-bold md:text-4xl text-xl py-20 text-center">
-                {error}
-              </p>
-            )}
-          </span>
+          <div className="flex justify-between items-center flex-wrap mb-8">
+            <div className="w-full md:w-1/3 flex justify-start">
+              <SearchInputTag
+                placeHolder="Search..."
+                name="searchBy"
+                value={searchEntry}
+                label=""
+                setter={(n, v) => {
+                  setSearchEntry(v);
+                }}
+              />
+            </div>
+
+            <div className="flex items-center space-x-2 mt-4 md:mt-0 w-full md:w-auto justify-center md:justify-start">
+              <button
+                onClick={() => handleCategoryChange(catPage - 1)}
+                disabled={catPage === 1}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+              >
+                <FaArrowLeft />
+              </button>
+
+              <div className="flex justify-between space-x-2 w-full md:w-[360px]">
+                {currentCategory.map((cat, index) => (
+                  <button
+                    key={index}
+                    className={`${
+                      cat.value === selectedCategory
+                        ? "bg-gradient-to-br from-purple-600 to-blue-500 text-white inline-flex rounded-lg group relative items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium"
+                        : "relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
+                    } `}
+                  >
+                    <span
+                      className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white ${
+                        cat.value === selectedCategory
+                          ? "text-white"
+                          : "bg-white text-black"
+                      }  group-hover:bg-transparent group-hover:text-white`}
+                      onClick={() => {
+                        setSelectedCategory(cat.value);
+                      }}
+                    >
+                      {cat.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => handleCategoryChange(catPage + 1)}
+                disabled={catPage === totalCategory}
+                className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
+              >
+                <FaArrowRight />
+              </button>
+            </div>
+          </div>
 
           {loading ? (
             <div className="loader"></div>
@@ -156,63 +206,6 @@ const page = () => {
             </h1>
           ) : (
             <>
-              <div className="flex justify-between items-center flex-wrap mb-8">
-                <div className="w-full md:w-1/3 flex justify-start">
-                  <SearchInputTag
-                    placeHolder="Search..."
-                    name="searchBy"
-                    value={searchEntry}
-                    label=""
-                    setter={(n, v) => {
-                      setSearchEntry(v);
-                    }}
-                  />
-                </div>
-
-                <div className="flex items-center space-x-2 mt-4 md:mt-0 w-full md:w-auto justify-center md:justify-start">
-                  <button
-                    onClick={() => handleCategoryChange(catPage - 1)}
-                    disabled={catPage === 1}
-                    className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-                  >
-                    <FaArrowLeft />
-                  </button>
-
-                  <div className="flex justify-between space-x-2 w-full md:w-[360px]">
-                    {currentCategory.map((cat, index) => (
-                      <button
-                        key={index}
-                        className={`${
-                          cat.value === selectedCategory
-                            ? "bg-gradient-to-br from-purple-600 to-blue-500 text-white inline-flex rounded-lg group relative items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium"
-                            : "relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300"
-                        } `}
-                      >
-                        <span
-                          className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white ${
-                            cat.value === selectedCategory
-                              ? "text-white"
-                              : "bg-white text-black"
-                          }  group-hover:bg-transparent group-hover:text-white`}
-                          onClick={() => {
-                            setSelectedCategory(cat.value);
-                          }}
-                        >
-                          {cat.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={() => handleCategoryChange(catPage + 1)}
-                    disabled={catPage === totalCategory}
-                    className="px-2 py-2 bg-gray-200 text-gray-700 rounded-full disabled:opacity-50"
-                  >
-                    <FaArrowRight />
-                  </button>
-                </div>
-              </div>
               {currentPosts.map((post: Records, index) => (
                 <div className="mb-12" key={post.postId}>
                   <div
