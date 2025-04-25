@@ -122,7 +122,8 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="md:hidden flex items-center">
+      <div className="md:hidden flex items-center gap-4">
+        <NotificationBell accessToken={helper.getData("token")} />
         <FaBars className="text-2xl cursor-pointer" onClick={toggleMenu} />
       </div>
 
@@ -150,16 +151,17 @@ const Header = () => {
           >
             Write
           </button>
-          <button
-            onClick={() => {
-              router.push("/");
-              setMenuOpen(false);
-            }}
-            className="w-full text-left px-4 py-2 rounded hover:bg-gray-100"
-          >
-            Login
-          </button>
-
+          {helper.getData("token") === "" && (
+            <button
+              onClick={() => {
+                router.push("/");
+                setMenuOpen(false);
+              }}
+              className="w-full text-left px-4 py-2 rounded hover:bg-gray-100"
+            >
+              Login
+            </button>
+          )}
           {helper.getData("token") && (
             <>
               <hr className="w-full" />
