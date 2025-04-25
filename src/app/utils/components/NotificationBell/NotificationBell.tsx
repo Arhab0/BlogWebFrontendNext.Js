@@ -5,58 +5,70 @@ import useHelper from "../../../../../Helper/helper";
 import moment from "moment";
 
 const NotificationBell = ({ accessToken }: { accessToken: string }) => {
-  const notifications = useNotifications(accessToken);
-  const [unreadNotifications, setUnreadNotifications] = useState([]);
-  const [mappedNotif, setMappedNotif] = useState<any>([]);
+  const realtimeNotifications = useNotifications(accessToken);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const helper = useHelper();
 
-  const markAllNotificationsAsRead = async () => {
-    helper.xhr
-      .Get("/Notification/MarkAllNotificationsAsRead")
-      .then((res) => {})
-      .catch(console.error)
-      .finally(() => {
-        GetNotification();
-      });
-  };
-
-  function GetNotification() {
+  const fetchNotifications = () => {
     helper.xhr
       .Get("/Notification/GetAllNotifications")
       .then((res) => {
-        setMappedNotif(res.notifications);
-        setUnreadNotifications([]);
+        const fetched = res.notifications.map((note: any) => ({
+          id: note.id,
+          message: note?.notification?.message || note?.message,
+          timeStamp: note?.notification?.timeSpan || note?.timeStamp,
+          isRead: note?.notification?.isRead ?? note?.isRead,
+        }));
+        setNotifications(fetched);
       })
       .catch(console.error);
-  }
-  useEffect(() => {
-    let arr = notifications.map((e: any) => ({
-      message: e?.notification?.message || e?.message,
-      timeStamp: e?.notification?.timeSpan || e?.timeStamp,
-      isRead: e?.notification?.isRead ?? e?.isRead,
-    }));
-    setMappedNotif(arr);
-  }, [notifications]);
+  };
+
+  const markAllNotificationsAsRead = async () => {
+    await helper.xhr.Get("/Notification/MarkAllNotificationsAsRead");
+    fetchNotifications();
+  };
 
   useEffect(() => {
-    setUnreadNotifications(mappedNotif.filter((note: any) => !note.isRead));
-  }, [mappedNotif]);
+    if (realtimeNotifications.length === 0) return;
+
+    setNotifications((prev) => {
+      const merged = [...prev];
+      for (const rt of realtimeNotifications) {
+        const exists = merged.some((n) => n.message === rt.message);
+        if (!exists) {
+          merged.push({
+            id: rt.id,
+            message: rt?.notification?.message || rt?.message,
+            timeStamp:
+              rt?.notification?.timeSpan || rt?.timeStamp || new Date(),
+            isRead: false,
+          });
+        }
+      }
+      return merged;
+    });
+  }, [realtimeNotifications]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <div className="relative">
       <button
         onClick={() => {
           setOpen(!open);
-          markAllNotificationsAsRead();
+          if (!open) markAllNotificationsAsRead();
         }}
         className="relative p-2 text-lg"
       >
         🔔
-        {unreadNotifications.length > 0 && (
-          <span className="absolute top-[4px] right-[1px] min-w-[16px] h-4 px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-            {unreadNotifications.length}
-          </span>
+        {unreadCount > 0 && (
+          <span className="absolute top-[2px] right-[2px] min-w-[14px] h-[14px] px-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center leading-none"></span>
         )}
       </button>
 
@@ -67,7 +79,7 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
               No notifications
             </p>
           ) : (
-            mappedNotif.map((note: any, i: number) => (
+            notifications.map((note, i) => (
               <div
                 key={i}
                 className="px-4 py-3 border-b last:border-b-0 hover:bg-gray-50 transition duration-200"

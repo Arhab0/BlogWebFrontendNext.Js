@@ -1,27 +1,18 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import { createConnection } from "../utils/Signalr";
-import useHelper from "../../../Helper/helper";
 
 export const useNotifications = (accessToken: string) => {
-    const helper = useHelper()
-  const [notifications, setNotifications] = useState<string[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
     if (!accessToken) return;
-    helper.xhr
-      .Get(
-        "/Notification/GetAllNotifications"
-      )
-      .then((res) => {
-        setNotifications(res.notifications);
-      })
-      .catch(console.error);
 
     const connection = createConnection(accessToken);
 
     connection.on("ReceiveNotification", (msg: string) => {
-      setNotifications((prev) => [msg, ...prev]);
+      const parsed = typeof msg === "string" ? JSON.parse(msg) : msg;
+      setNotifications((prev) => [...prev, parsed]);
     });
 
     connection
