@@ -88,6 +88,10 @@ const Login = () => {
       });
   }
 
+  if (helper.getData("token")) {
+    router.push("/Home");
+  }
+
   return (
     <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
       <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
