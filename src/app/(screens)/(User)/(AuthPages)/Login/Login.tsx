@@ -49,7 +49,7 @@ const Login = () => {
         })
       )
       .then((res) => {
-        //console.log(res);
+        console.log(res);
 
         if (res.message) {
           setDeActivationReason(res.message);
@@ -88,7 +88,7 @@ const Login = () => {
       });
   }
 
-  if (helper.getData("token")) {
+  if (helper.getData("token") && helper.getData("RoleId") === "2") {
     router.push("/Home");
   }
 
