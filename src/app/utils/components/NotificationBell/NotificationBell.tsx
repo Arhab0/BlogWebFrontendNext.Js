@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useNotifications } from "../../../hooks/useNotifications";
 import useHelper from "../../../../../Helper/helper";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 
 const NotificationBell = ({ accessToken }: { accessToken: string }) => {
+  const router = useRouter();
   const realtimeNotifications = useNotifications(accessToken);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
@@ -14,11 +16,14 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
     helper.xhr
       .Get("/Notification/GetAllNotifications")
       .then((res) => {
+        console.log("res", res);
         const fetched = res.notifications.map((note: any) => ({
           id: note.id,
           message: note?.notification?.message || note?.message,
           timeStamp: note?.notification?.timeSpan || note?.timeStamp,
           isRead: note?.notification?.isRead ?? note?.isRead,
+          navigateTo: note?.notification?.navigateTo ?? note?.navigateTo,
+          type: note?.notification?.type ?? note?.type,
         }));
         setNotifications(fetched);
       })
@@ -32,7 +37,7 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
 
   useEffect(() => {
     if (realtimeNotifications.length === 0) return;
-
+    console.log("real time", realtimeNotifications);
     setNotifications((prev) => {
       const merged = [...prev];
       for (const rt of realtimeNotifications) {
@@ -41,6 +46,8 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
           merged.push({
             id: rt.id,
             message: rt?.notification?.message || rt?.message,
+            type: rt?.notification?.type || rt?.type,
+            navigateTo: rt?.notification?.navigateTo || rt?.navigateTo,
             timeStamp:
               rt?.notification?.timeSpan || rt?.timeStamp || new Date(),
             isRead: false,
@@ -82,7 +89,19 @@ const NotificationBell = ({ accessToken }: { accessToken: string }) => {
             notifications.map((note, i) => (
               <div
                 key={i}
-                className="px-4 py-3 border-b last:border-b-0 hover:bg-gray-50 transition duration-200"
+                className="px-4 py-3 border-b last:border-b-0 hover:bg-gray-50 transition duration-200 cursor-pointer"
+                onClick={() => {
+                  if (note.type === "follow") {
+                    router.push(`/UsersProfile/${note.navigateTo}`);
+                  } else if (note.type === "post request") {
+                    router.push(`/Profile/ViewPost/${note.navigateTo}`);
+                  } else if (
+                    note.type === "comment" ||
+                    note.type === "reply comment"
+                  ) {
+                    router.push(`/Post/SinglePost/${note.navigateTo}`);
+                  }
+                }}
               >
                 <p className="text-sm text-gray-800 font-medium">
                   {note?.message}
