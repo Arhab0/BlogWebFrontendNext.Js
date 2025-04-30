@@ -189,6 +189,11 @@ const Login = () => {
                   id="password"
                   name="password"
                   value={obj.password}
+                  onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                      Submit();
+                    }
+                  }}
                   onChange={(e) => setObj({ ...obj, password: e.target.value })}
                   className={`peer w-full mt-2 bg-[#f7f7f7] p-3 rounded-md border ${
                     errors.password && "border-red-500"
