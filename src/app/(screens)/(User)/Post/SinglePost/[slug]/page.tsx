@@ -168,7 +168,7 @@ const page = () => {
           <div className="max-w-7xl">
             <div className="w-[100%] flex md:flex-row gap-11 flex-col">
               <div className="md:w-[70%] w-full">
-                <div className="mt-9" id="post-content">
+                <div className="mt-7" id="post-content">
                   <img
                     className="w-full md:h-auto rounded-md object-cover"
                     src={`https://localhost:44385/${post?.postImg}`}
@@ -274,7 +274,7 @@ const page = () => {
                       </div>
                     )}
                   </div>
-                  <h1 className="font-bold text-2xl my-5">{post?.Title}</h1>
+                  <h1 className="font-bold text-2xl mt-5">{post?.Title}</h1>
                   <div
                     className="prose prose-sm md:prose-base max-w-none overflow-x-hidden overflow-y-auto prose-p:my-2 prose-li:my-1"
                     dangerouslySetInnerHTML={{

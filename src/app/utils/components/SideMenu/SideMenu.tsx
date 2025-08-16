@@ -170,7 +170,7 @@ const SideMenu = ({ isOpened, setIsOpened }: SideMenuProps) => {
         className="cursor-pointer"
         onClick={() => {
           localStorage.clear();
-          router.push("/");
+          router.push("/Login");
         }}
       />
       <Image
