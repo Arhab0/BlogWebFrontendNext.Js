@@ -201,6 +201,7 @@ const useHelper = () => {
         method: "GET",
         headers: headers,
       });
+      console.log(response,headers,"ssssssssssss")
       if (response.ok) {
         const contentType = response.headers.get("Content-Type");
         if (

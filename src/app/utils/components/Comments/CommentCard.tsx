@@ -146,11 +146,11 @@ const CommentCard = ({ comment, loggedInUserId, onCommentUpdated }: Props) => {
             setReloadReplies={setReloadReplies}
           />
 
-          <ReplyForm
+         {helper.getData("token") && <ReplyForm
             commentId={comment.commentId}
             postId={comment.postId}
             onReplyAdded={() => setReloadReplies((prev) => !prev)}
-          />
+          />}
         </div>
       )}
       <p

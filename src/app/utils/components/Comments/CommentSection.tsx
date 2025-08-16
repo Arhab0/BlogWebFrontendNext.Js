@@ -42,7 +42,7 @@ const CommentSection = ({ postId, loggedInUserId }: Props) => {
       <h2 className="text-xl font-semibold mb-4">
         Comments ( {comments.length} )
       </h2>
-      <CommentForm postId={postId} onCommentAdded={fetchComments} />
+      {helper.getData("token") && <CommentForm postId={postId} onCommentAdded={fetchComments} />}
       <div className="space-y-6 mt-6">
         {comments.map((comment) => (
           <CommentCard

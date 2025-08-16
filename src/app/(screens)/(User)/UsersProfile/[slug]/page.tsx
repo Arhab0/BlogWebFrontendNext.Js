@@ -150,6 +150,7 @@ const page = () => {
                   <p className="text-lg font-semibold text-gray-800">
                     {user?.FullName}
                   </p>
+                  {helper.getData("token") &&
                   <div className="flex items-center gap-2">
                     {isFollowing ? (
                       <button
@@ -174,7 +175,7 @@ const page = () => {
                         <span>Follow</span>
                       </button>
                     )}
-                  </div>
+                  </div>}
                 </div>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-600">

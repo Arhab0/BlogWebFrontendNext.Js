@@ -24,7 +24,12 @@ const page = () => {
       .Get("/Profile/GetHistoryPost")
       .then((res) => {
         // console.log(res);
+        if(Array.isArray(res.post) && res.post.length === 0) {
         setPosts(res.post);
+        }
+        else{
+          setPosts([]);
+        }
       })
       .catch((err) => {})
       .finally(() => {

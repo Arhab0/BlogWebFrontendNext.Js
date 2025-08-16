@@ -106,7 +106,7 @@ const page = () => {
             progress: undefined,
             theme: "light",
           });
-          router.push("/");
+          router.push("/Login");
         });
       //console.log(user, file);
     }

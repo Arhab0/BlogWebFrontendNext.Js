@@ -6,7 +6,7 @@ import useHelper from "../../../../../../Helper/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Login = () => {
+const page = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -249,4 +249,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default page;

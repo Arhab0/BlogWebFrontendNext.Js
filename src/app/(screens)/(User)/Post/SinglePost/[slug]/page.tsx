@@ -203,7 +203,7 @@ const page = () => {
                             {post?.AuthorName}
                           </p>
 
-                          {post?.userId !==
+                          {helper.getData("token") && post?.userId !==
                             parseInt(helper.getData("UserId")) && (
                             <div className="flex items-center gap-2">
                               {isFollowing ? (
@@ -238,7 +238,7 @@ const page = () => {
                         </p>
                       </div>
                     </div>
-                    {post?.userId !== parseInt(helper.getData("UserId")) && (
+                    {helper.getData("token") && post?.userId !== parseInt(helper.getData("UserId")) && (
                       <div className="flex items-center gap-2 sm:mt-0 mt-3 ">
                         {isWatchLater == true ? (
                           <div className="flex items-center gap-2">

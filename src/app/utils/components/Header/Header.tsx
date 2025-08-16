@@ -39,7 +39,7 @@ const Header = () => {
       </div>
 
       <div className="hidden md:flex items-center space-x-4">
-        <NotificationBell accessToken={helper.getData("token")} />
+        {helper.getData("token") && <NotificationBell accessToken={helper.getData("token")} />}
         <div className="flex gap-2 items-center">
           {helper.getData("token") && (
             <button
@@ -55,14 +55,14 @@ const Header = () => {
               </span>
             </button>
           )}
-          {helper.getData("token") === "" && (
+          {!helper.getData("token") && (
             <button
               className={`relative inline-flex items-center w-full mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             >
               <span
                 className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
                 onClick={() => {
-                  router.push("/");
+                  router.push("/Login");
                 }}
               >
                 Login
