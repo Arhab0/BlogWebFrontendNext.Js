@@ -24,8 +24,14 @@ const Header = () => {
   };
 
   function handleLogout() {
-    localStorage.clear();
-    router.push("/");
+    if(helper.getData("RoleId") === "1") {
+      localStorage.clear();
+      router.push("/Login");
+    }
+    else{  
+      localStorage.clear();
+      router.push("/");
+    }
   }
   return (
     <header className="flex items-center justify-between px-4 py-2 bg-[#f9f9f9] shadow-sm">
