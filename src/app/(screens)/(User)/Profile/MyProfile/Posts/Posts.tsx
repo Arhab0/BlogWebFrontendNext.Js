@@ -101,7 +101,7 @@ const page = ({ ViewMode }: PageProps) => {
                       <div className={`flex gap-8 items-center`}>
                         <div className="flex-shrink-0 cursor-pointer transition-transform duration-300 hover:scale-95">
                           <img
-                            src={`https://localhost:44385/${post.Img}`}
+                            src={`${helper.GetUrl()}/${post.Img}`}
                             alt={post.Title}
                             className="w-24 h-24 lg:w-80 lg:h-60 md:w-40 md:h-40 object-cover rounded shadow-md"
                           />
@@ -136,7 +136,7 @@ const page = ({ ViewMode }: PageProps) => {
                       onClick={() => router.push(`/Post/SinglePost/${post.Id}`)}
                     >
                       <img
-                        src={`https://localhost:44385/${post.Img}`}
+                        src={`${helper.GetUrl()}/${post.Img}`}
                         alt={post.Title}
                         className="w-full h-56 object-cover rounded-md shadow-md"
                       />

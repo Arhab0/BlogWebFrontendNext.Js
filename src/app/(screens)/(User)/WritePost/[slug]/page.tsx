@@ -304,7 +304,7 @@ const CreatePostPage = () => {
           isModalOpen ? "blur-background" : ""
         } `}
       >
-        <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+         <ToastContainer style={{ zIndex: 99999 }} />
         <Modal isOpen={isModalOpen} onClose={closeModal} />
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
           {/* Main content */}
@@ -380,7 +380,7 @@ const CreatePostPage = () => {
                   <div className="relative mt-4">
                     {post.postImg !== "" ? (
                       <img
-                        src={`https://localhost:44385/${post.postImg}`}
+                        src={`${helper.GetUrl()}/${post.postImg}`}
                         className="w-full h-64 rounded-md object-cover border border-gray-300"
                       />
                     ) : (

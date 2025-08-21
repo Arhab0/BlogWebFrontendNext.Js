@@ -64,7 +64,7 @@ const ApprovedView = ({ userId }: Props) => {
 
   return (
     <div className="bg-[#f7f7f7db] mx-auto rounded-xl p-11 sm:w-full md:w-1/2 flex-1 flex flex-col justify-center font-inter max-h-fit shadow-custom-shadow-div">
-      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+       <ToastContainer style={{ zIndex: 99999 }} />
       <h2 className="font-inter font-light text-2xl">Reset Password</h2>
       <div className="grid space-y-5 mt-5">
         <InputTag

@@ -45,7 +45,7 @@ const ReplyForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="mt-3">
-      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+       <ToastContainer style={{ zIndex: 99999 }} />
       <textarea
         className="w-full border p-2 rounded"
         placeholder="Write a reply..."

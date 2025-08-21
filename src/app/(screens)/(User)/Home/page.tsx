@@ -215,7 +215,7 @@ const page = () => {
                   >
                     <div className="flex-shrink-0 cursor-pointer transition-transform duration-300 hover:scale-95">
                       <img
-                        src={`https://localhost:44385/${post.Img}`}
+                        src={`${helper.GetUrl()}/${post.Img}`}
                         alt={post.Title}
                         className="w-full max-w-[420px] h-80 object-cover rounded shadow-md"
                       />
@@ -235,8 +235,14 @@ const page = () => {
                           ? `${getText(post.Description).substring(0, 220)}...`
                           : getText(post.Description)}
                       </p>
-                      <button className="px-6 py-2 rounded-md bg-[#b9e7e7] hover:bg-[#a3dddd] transition duration-200 shadow-md hover:-translate-y-1">
-                        Read More
+                      <button
+                        className={`relative inline-flex xs:items-center mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+                      >
+                        <span
+                          className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+                        >
+                          Read More
+                        </span>
                       </button>
                     </div>
                   </div>

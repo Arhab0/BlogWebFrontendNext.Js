@@ -74,7 +74,7 @@ const InitialView = ({ moveForward }: Props) => {
   const forgetPassword = () => {
     setLoading(true);
 
-    fetch(`https://localhost:44385/Auth/ForgotPassword?emailAddress=${email}`, {
+    fetch(`${helper.GetUrl()}/Auth/ForgotPassword?emailAddress=${email}`, {
       method: "GET",
     })
       .then(async (response: any) => {

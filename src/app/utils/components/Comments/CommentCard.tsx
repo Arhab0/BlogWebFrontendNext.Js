@@ -60,11 +60,11 @@ const CommentCard = ({ comment, loggedInUserId, onCommentUpdated }: Props) => {
 
   return (
     <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+       <ToastContainer style={{ zIndex: 99999 }} />
       <div className="flex items-start justify-between">
         <div className="flex gap-3">
           <img
-            src={`https://localhost:44385/${comment.ProfilePic}`}
+            src={`${helper.GetUrl()}/${comment.ProfilePic}`}
             alt="Profile"
             className="w-10 h-10 rounded-full"
           />

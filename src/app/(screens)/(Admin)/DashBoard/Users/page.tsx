@@ -136,7 +136,7 @@ const page = () => {
 
   return (
     <div className="font-alata flex-1 h-full cursor-default">
-      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+      <ToastContainer style={{ zIndex: 99999 }} />
       {showRejectModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">

@@ -1,10 +1,13 @@
 import { defaultTokenObject, Token } from "@/app/lib/Token";
 import { usePathname, useRouter } from "next/navigation";
+import { env } from "process";
 
 const useHelper = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const API: string = "https://localhost:44385"
+  // const API: string = "https://localhost:44385"
+  const API:string = process.env.NODE_ENV === "development"
+  ? "https://localhost:44385": "http://bog.runasp.net"
   const headers: Headers = new Headers({
     Authorization: "Bearer " + getData("token"),
   });
@@ -180,7 +183,7 @@ const useHelper = () => {
       } else {
         const err = await response.text();
         console.error(err);
-        throw new Error(err);
+        throw { status: response.status, message: err };
       }
     },
     Get: async (
@@ -201,7 +204,6 @@ const useHelper = () => {
         method: "GET",
         headers: headers,
       });
-      console.log(response,headers,"ssssssssssss")
       if (response.ok) {
         const contentType = response.headers.get("Content-Type");
         if (
@@ -248,7 +250,7 @@ const useHelper = () => {
     GetToken,
     removeData,
     GetDocument,
-    GetUrl
+    GetUrl,
   };
 };
 

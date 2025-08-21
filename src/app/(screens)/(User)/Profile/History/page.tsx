@@ -57,7 +57,7 @@ const page = () => {
               onClick={() => router.push(`/Post/SinglePost/${item.Id}`)}
             >
               <img
-                src={`https://localhost:44385/${item.postImg}`}
+                src={`${helper.GetUrl()}/${item.postImg}`}
                 className="rounded-md object-cover h-48 w-full mb-4"
                 alt="Post Image"
               />
@@ -65,7 +65,7 @@ const page = () => {
               <div className="flex items-center gap-4">
                 {item?.userImg ? (
                   <img
-                    src={`https://localhost:44385/${item?.userImg}`}
+                    src={`${helper.GetUrl()}/${item?.userImg}`}
                     className="w-10 h-10 rounded-full"
                     alt="Author"
                   />

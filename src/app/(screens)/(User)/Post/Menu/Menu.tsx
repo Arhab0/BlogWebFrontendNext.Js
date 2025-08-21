@@ -56,13 +56,13 @@ const Menu = ({ CatIdProp, PostId }: PageProps) => {
         >
           <img
             className="w-full md:h-auto rounded-md object-cover"
-            src={`https://localhost:44385/${post?.Img}`}
+            src={`${helper.GetUrl()}/${post?.Img}`}
             alt="Blog Photo"
           />
-          <p>
-            <h1 className="font-bold text-lg mt-2">{post.Title}</h1>
+          <h1 className="font-bold text-lg mt-2">{post.Title}</h1>
+          <div className="w-full grid place-content-center md:place-content-start">
             <button
-              className={`relative inline-flex items-center w-1/2 mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
+              className={`relative inline-flex xs:items-center mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             >
               <span
                 className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
@@ -70,16 +70,22 @@ const Menu = ({ CatIdProp, PostId }: PageProps) => {
                 Read More
               </span>
             </button>
-          </p>
+          </div>
         </div>
       ))}
       <div className="flex items-center justify-center">
-        <p
-          onClick={() => router.push(`/Home`)}
-          className="font-bold text-xl cursor-pointer border-2 py-3 px-6 rounded-[30px] hover:border-black duration-300"
+        <button
+          onClick={() => {
+            router.push("/Home");
+          }}
+          className={`relative inline-flex items-center w-28 mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
         >
-          More Post
-        </p>
+          <span
+            className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+          >
+            More Post
+          </span>
+        </button>
       </div>
     </div>
   );

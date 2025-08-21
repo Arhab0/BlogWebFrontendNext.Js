@@ -56,11 +56,11 @@ const ReplyCard = ({
 
   return (
     <div className="bg-gray-100 p-3 rounded">
-      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+       <ToastContainer style={{ zIndex: 99999 }} />
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
           <img
-            src={`https://localhost:44385/${reply.RepliedByProfilePic}`}
+            src={`${helper.GetUrl()}/${reply.RepliedByProfilePic}`}
             alt="Reply User"
             className="w-8 h-8 rounded-full"
           />

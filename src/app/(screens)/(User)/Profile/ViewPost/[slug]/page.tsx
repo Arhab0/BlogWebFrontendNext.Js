@@ -112,10 +112,10 @@ const page = () => {
               Back to list
             </span>
           </p>
-          <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+           <ToastContainer style={{ zIndex: 99999 }} />
           <img
             className="w-full md:h-auto rounded-md object-cover"
-            src={`https://localhost:44385/${post?.postImg}`}
+            src={`${helper.GetUrl()}/${post?.postImg}`}
             alt=""
           />
           <div className="flex items-center justify-between flex-wrap md:my-2 my-3">

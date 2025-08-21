@@ -1,14 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { createConnection } from "../utils/Signalr";
+import useHelper from "../../../Helper/helper";
 
 export const useNotifications = (accessToken: string) => {
   const [notifications, setNotifications] = useState<any[]>([]);
+  const helper = useHelper()
 
   useEffect(() => {
     if (!accessToken) return;
 
-    const connection = createConnection(accessToken);
+    const connection = createConnection(accessToken,helper.GetUrl());
 
     connection.on("ReceiveNotification", (msg: string) => {
       const parsed = typeof msg === "string" ? JSON.parse(msg) : msg;

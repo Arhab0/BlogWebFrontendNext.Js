@@ -49,8 +49,7 @@ const page = () => {
         })
       )
       .then((res) => {
-        console.log(res);
-
+        console.log(res)
         if (res.message) {
           setDeActivationReason(res.message);
           setShowRejectModal(true);
@@ -71,21 +70,49 @@ const page = () => {
         }
       })
       .catch((err) => {
-        localStorage.clear();
-        toast.error("User not found!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      })
-      .finally(() => {
+        console.log(err.status + " " + err.message);
+        // if()
+        // console.log(err.response.status)
+        if (err.status === 404) {
+          // alert("herll")
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else if (err.status === 403) {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error(err.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
         setLoading(false);
       });
+    // .finally(() => {
+    //   setLoading(false);
+    // });
   }
 
   if (helper.getData("token") && helper.getData("RoleId") === "2") {
@@ -93,156 +120,129 @@ const page = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white shadow sm:rounded-lg flex justify-center flex-1">
-      <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
-      {showRejectModal && (
+    <div className="min-h-screen flex bg-gray-50">
+       <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              style={{zIndex: 99999 }}
+            />
+      {/* Left Hero Section */}
+      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 text-white flex-col justify-center items-center p-12">
+        <h1 className="text-5xl font-bold mb-6">Welcome Back 👋</h1>
+        <p className="text-lg text-blue-100 text-center max-w-md">
+          Login to your account and continue exploring our platform with ease.
+        </p>
         <div
-          tabIndex={-1}
-          aria-hidden={!showRejectModal}
-          className="fixed top-0 left-0 right-0 z-50 flex justify-center items-center w-full min-h-screen overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 px-2"
-        >
-          <div className="relative w-full px-4 sm:px-6 max-w-md sm:max-w-xl md:max-w-2xl max-h-full">
-            <div className="relative bg-[#e5e5e5] rounded-lg shadow-sm max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-300">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  Reason For DeActivation
-                </h3>
-                <button
-                  onClick={() => setShowRejectModal(false)}
-                  className="text-gray-400 bg-transparent hover:bg-gray-400 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center hover:text-white"
-                >
-                  <svg
-                    className="w-3 h-3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 14"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                    />
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
-              </div>
-
-              <div className="p-4 md:p-5 space-y-4">
-                <p className="text-base leading-relaxed text-black break-words">
-                  {deActivationReason}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-end p-4 md:p-5 border-t border-gray-300 rounded-b">
-                <button className="relative inline-flex items-center w-full sm:w-auto justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300">
-                  <span
-                    className="relative px-4 py-2 rounded-md w-full text-center bg-white text-black group-hover:bg-transparent group-hover:text-white"
-                    onClick={() => setShowRejectModal(false)}
-                  >
-                    I accept
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      <div
-        className="flex-1 text-center hidden lg:flex items-center justify-center"
-        style={{ background: " radial-gradient(#6cb6eb, #2734c5)" }}
-      >
-        <div
-          className="w-[60%] bg-contain bg-center bg-no-repeat h-[80%]"
+          className="mt-10 w-[70%] h-[60%] bg-center bg-contain bg-no-repeat"
           style={{ backgroundImage: "url('/assets/LoginPagePhoto.png')" }}
         />
       </div>
 
-      <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12 flex items-center justify-center">
-        <div className="flex flex-col items-center w-full">
-          <h4 className="text-4xl xl:text-2xl font-medium">Login</h4>
+      {/* Right Login Section */}
+      <div className="flex flex-1 justify-center items-center px-6 sm:px-12">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+          <h2 className="text-3xl font-bold text-gray-900 text-center">
+            Login
+          </h2>
 
-          <div className="w-full flex-1 mt-8">
-            <div className="mx-auto">
-              <div className="relative mt-6">
-                <label className="text-sm text-gray-800">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={obj.email}
-                  onChange={(e) => setObj({ ...obj, email: e.target.value })}
-                  className={`peer w-full mt-2 bg-[#f7f7f7] p-3 rounded-md border ${
-                    errors.email && "border-red-500"
-                  } focus:outline-none`}
-                />
-                {errors.email && (
-                  <p className="text-xs text-red-500 mt-1">{errors.email}</p>
-                )}
-              </div>
+          {/* Email Input */}
+          <div className="mt-8">
+            <label className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <div className="relative mt-2">
+              <input
+                type="email"
+                className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="you@example.com"
+                value={obj.email}
+                onChange={(e) => setObj({ ...obj, email: e.target.value })}
+              />
+              <span className="absolute left-3 top-3 text-gray-400">
+                <i className="fas fa-envelope"></i>
+              </span>
+            </div>
+            {errors.email && (
+              <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+            )}
+          </div>
 
-              <div className="relative mt-6">
-                <label className="text-sm text-gray-800">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={obj.password}
-                  onKeyUp={(e) => {
-                    if (e.key === "Enter") {
-                      Submit();
-                    }
-                  }}
-                  onChange={(e) => setObj({ ...obj, password: e.target.value })}
-                  className={`peer w-full mt-2 bg-[#f7f7f7] p-3 rounded-md border ${
-                    errors.password && "border-red-500"
-                  } focus:outline-none`}
-                />
-                {errors.password && (
-                  <p className="text-xs text-red-500 mt-1">{errors.password}</p>
-                )}
+          {/* Password Input */}
+          <div className="mt-6">
+            <label className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <div className="relative mt-2">
+              <input
+                type="password"
+                className="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-400 outline-none"
+                placeholder="••••••••"
+                value={obj.password}
+                onChange={(e) => setObj({ ...obj, password: e.target.value })}
+                onKeyUp={(e) => e.key === "Enter" && Submit()}
+              />
+              <span className="absolute left-3 top-3 text-gray-400">
+                <i className="fas fa-lock"></i>
+              </span>
+            </div>
+            {errors.password && (
+              <p className="text-xs text-red-500 mt-1">{errors.password}</p>
+            )}
 
-                {/* Forgot Password Link */}
-                <div className="flex justify-end mt-1">
-                  <p
-                    className="text-sm text-blue-500 hover:cursor-pointer"
-                    onClick={() => {
-                      router.push("/ForgotPassword");
-                    }}
-                  >
-                    Forgot Password?
-                  </p>
-                </div>
-              </div>
-
-              <div className="items-center flex-col mt-8 flex">
-                <button
-                  className={`relative inline-flex items-center w-1/2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-                >
-                  <span
-                    className={`relative px-8 py-2 rounded-md w-full transition-all ease-in duration-75 ${
-                      loading
-                        ? "bg-transparent text-white"
-                        : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
-                    }`}
-                    onClick={Submit}
-                  >
-                    {loading ? <BladeLoader /> : "Login"}
-                  </span>
-                </button>
-
-                <p
-                  className="text-sm text-gray-500 hover:cursor-pointer hover:text-blue-700 mt-2"
-                  onClick={() => {
-                    router.push("/Signup");
-                  }}
-                >
-                  Didn’t have an account? Register here
-                </p>
-              </div>
+            <div className="flex justify-end mt-2">
+              <p
+                className="text-sm text-blue-600 hover:underline cursor-pointer"
+                onClick={() => router.push("/ForgotPassword")}
+              >
+                Forgot Password?
+              </p>
             </div>
           </div>
+
+          {/* Login Button */}
+          <div className="flex flex-col items-center mt-2">
+            <button
+              onClick={Submit}
+              disabled={loading}
+              className="relative inline-flex items-center w-full justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300 ease-in-out"
+            >
+              <span
+                className={`relative px-4 py-3 rounded-md w-full transition-all ease-in duration-75 ${
+                  loading
+                    ? "bg-transparent text-white"
+                    : "bg-white text-black group-hover:bg-transparent group-hover:text-white"
+                }`}
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <BladeLoader />
+                    <span className="ml-2">Processing...</span>
+                  </div>
+                ) : (
+                  "Login"
+                )}
+              </span>
+            </button>
+          </div>
+
+          {/* Register Link */}
+          <p className="text-sm text-gray-500 text-center mt-6">
+            Don’t have an account?{" "}
+            <span
+              className="text-blue-600 hover:underline cursor-pointer"
+              onClick={() => router.push("/Signup")}
+            >
+              Register here
+            </span>
+          </p>
         </div>
       </div>
     </div>

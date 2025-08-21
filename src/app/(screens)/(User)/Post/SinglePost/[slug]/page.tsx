@@ -164,21 +164,21 @@ const page = () => {
         <div className="loader"></div>
       ) : (
         <div className="px-6 py-10">
-          <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+           <ToastContainer style={{ zIndex: 99999 }} />
           <div className="max-w-7xl">
             <div className="w-[100%] flex md:flex-row gap-11 flex-col">
               <div className="md:w-[70%] w-full">
                 <div className="mt-7" id="post-content">
                   <img
                     className="w-full md:h-auto rounded-md object-cover"
-                    src={`https://localhost:44385/${post?.postImg}`}
+                    src={`${helper.GetUrl()}/${post?.postImg}`}
                     alt=""
                   />
                   <div className="flex items-center justify-between flex-wrap">
                     <div className="flex items-center gap-4 mt-3">
                       {post?.userPhoto ? (
                         <img
-                          src={`https://localhost:44385/${post?.userPhoto}`}
+                          src={`${helper.GetUrl()}/${post?.userPhoto}`}
                           className="w-10 h-10 rounded-full"
                           alt=""
                         />

@@ -15,6 +15,7 @@ interface DashboardLayoutProps {
 export default function SideMenuLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const [path, setPath] = useState<string[]>([]);
+   const [isOpened, setIsOpened] = useState(true);
 
   useEffect(() => {
     setPath(pathname.split("/").slice(1));
@@ -49,7 +50,7 @@ export default function SideMenuLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-full flex-1 bg-[#F5F5F9]">
       <div className="sticky top-0 h-full hidden md:block">
-        <SideMenu />
+        <SideMenu isOpened={true} setIsOpened={setIsOpened}/>
       </div>
       <div className="w-full flex-1 flex flex-col overflow-y-auto py-5 px-3 md:px-0">
         <p className="px-0 md:px-5 text-xs text-[#575757] mb-1.5">

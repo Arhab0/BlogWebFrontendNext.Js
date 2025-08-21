@@ -94,14 +94,9 @@ const page = ({ FollowType, userId, Name, refreshTrigger }: PageProps) => {
                         key={item.UserId}
                         className="flex items-center gap-6 border-b pb-4 transition-all duration-200 px-4 py-2 rounded-md"
                       >
-                        {/* <img
-                          src={`https://localhost:44385/${item.UserProfilePic}`}
-                          alt={"Profile Pic"}
-                          className="w-14 h-14 object-cover rounded-full shadow-sm"
-                        /> */}
                         {item?.UserProfilePic ? (
                           <img
-                            src={`https://localhost:44385/${item?.UserProfilePic}`}
+                            src={`${helper.GetUrl()}/${item?.UserProfilePic}`}
                             className="w-10 h-10 object-cover rounded-full shadow-sm"
                             alt=""
                           />

@@ -154,14 +154,14 @@ const Home = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
+        <div className="lg:col-span-6 bg-white rounded-xl shadow p-6">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Posts Status Overview
           </h2>
           <PostStatusChart data={info} />
         </div>
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="lg:col-span-4 bg-white rounded-xl shadow p-6">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Users Status Overview
           </h2>

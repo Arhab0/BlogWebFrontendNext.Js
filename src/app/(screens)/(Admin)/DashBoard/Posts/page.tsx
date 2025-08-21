@@ -193,7 +193,7 @@ const page = () => {
                   <td className="pr-2 py-1">
                     <img
                       className="h-14 w-14 rounded-md object-cover"
-                      src={`https://localhost:44385/${e?.postImg}`}
+                      src={`${helper.GetUrl()}/${e?.postImg}`}
                       alt="Post Img"
                     />
                   </td>

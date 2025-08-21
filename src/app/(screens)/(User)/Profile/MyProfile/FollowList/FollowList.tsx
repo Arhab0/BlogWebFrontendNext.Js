@@ -84,7 +84,7 @@ const page = ({ FollowType }: PageProps) => {
                 >
                   {item?.UserProfilePic ? (
                     <img
-                      src={`https://localhost:44385/${item?.UserProfilePic}`}
+                      src={`${helper.GetUrl()}/${item?.UserProfilePic}`}
                       className="w-14 h-14 object-cover rounded-full shadow-sm"
                       alt=""
                     />

@@ -137,7 +137,7 @@ const page = () => {
             <div className="flex flex-col md:flex-row items-center gap-5 w-full md:mx-auto">
               {user?.ProfilePic ? (
                 <img
-                  src={`https://localhost:44385/${user?.ProfilePic}`}
+                  src={`${helper.GetUrl()}/${user?.ProfilePic}`}
                   className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border border-gray-300"
                   alt=""
                 />

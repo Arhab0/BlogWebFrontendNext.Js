@@ -54,7 +54,7 @@ const page = () => {
                 }}
               >
                 <img
-                  src={`https://localhost:44385/${item.postImg}`}
+                  src={`${helper.GetUrl()}/${item.postImg}`}
                   className="rounded-md object-cover h-48 w-full mb-4"
                   alt="Post Image"
                 />

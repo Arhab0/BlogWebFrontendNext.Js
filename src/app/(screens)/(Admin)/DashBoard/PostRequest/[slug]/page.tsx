@@ -135,17 +135,17 @@ const page = () => {
               Back to list
             </span>
           </p>
-          <ToastContainer style={{ marginTop: "30px", zIndex: 99999 }} />
+          <ToastContainer style={{ zIndex: 99999 }} />
           {/* <div className="w-full aspect-[16/9]">
             <img
               className="w-full h-full object-cover rounded-md"
-              src={`https://localhost:44385/${post?.postImg}`}
+              src={`${helper.GetUrl()}/${post?.postImg}`}
               alt="Post Image"
             />
           </div> */}
           <img
             className="w-full max-h-[45rem] object-fill rounded-md"
-            src={`https://localhost:44385/${post?.postImg}`}
+            src={`${helper.GetUrl()}/${post?.postImg}`}
             alt="Post Image"
           />
 
