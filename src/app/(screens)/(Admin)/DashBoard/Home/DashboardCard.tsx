@@ -33,7 +33,7 @@ const DashboardCard = ({ title, value, icon, color }: DashboardCardProps) => {
           {icon}
         </div>
         <div>
-          <p className="text-sm font-medium">{title}</p>
+          <p className="text-sm font-medium text-nowrap">{title}</p>
           <p className="text-2xl font-bold">{value}</p>
         </div>
       </div>
