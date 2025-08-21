@@ -7,7 +7,7 @@ const useHelper = () => {
   const router = useRouter();
   // const API: string = "https://localhost:44385"
   const API:string = process.env.NODE_ENV === "development"
-  ? "https://localhost:44385": "/api/proxy"
+  ? "https://localhost:44385": "https://zms.runasp.net"
   const headers: Headers = new Headers({
     Authorization: "Bearer " + getData("token"),
   });
