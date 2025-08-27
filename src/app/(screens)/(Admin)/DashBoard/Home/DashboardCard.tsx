@@ -5,37 +5,55 @@ interface DashboardCardProps {
   value: number;
   icon: React.ReactNode;
   color: "blue" | "green" | "red" | "yellow" | "orange";
+  isLoading?: boolean;
 }
 
-const DashboardCard = ({ title, value, icon, color }: DashboardCardProps) => {
-  const bgColor = {
-    blue: "bg-blue-100 text-blue-700",
-    green: "bg-green-100 text-green-700",
-    red: "bg-red-100 text-red-700",
-    yellow: "bg-yellow-100 text-yellow-700",
-    orange: "bg-orange-100 text-orange-700",
+const DashboardCard = ({ title, value, icon, color, isLoading = false}: DashboardCardProps) => {
+  const colorMap = {
+    blue: {
+      bg: "bg-blue-50",
+      iconBg: "bg-blue-500",
+      text: "text-blue-700",
+    },
+    green: {
+      bg: "bg-green-50",
+      iconBg: "bg-green-500",
+      text: "text-green-700",
+    },
+    red: {
+      bg: "bg-red-50",
+      iconBg: "bg-red-500",
+      text: "text-red-700",
+    },
+    yellow: {
+      bg: "bg-yellow-50",
+      iconBg: "bg-yellow-500",
+      text: "text-yellow-700",
+    },
+    orange: {
+      bg: "bg-orange-50",
+      iconBg: "bg-orange-500",
+      text: "text-orange-700",
+    },
   };
 
-  const iconColor = {
-    blue: "bg-blue-500",
-    green: "bg-green-500",
-    red: "bg-red-500",
-    yellow: "bg-yellow-500",
-    orange: "bg-orange-500",
-  };
+  const selectedColor = colorMap[color];
 
   return (
-    <div className={`p-5 rounded-xl shadow-md ${bgColor[color]}`}>
-      <div className="flex items-center gap-4">
-        <div
-          className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${iconColor[color]}`}
-        >
+    <div className={`p-5 rounded-2xl border-l-4 ${selectedColor.bg} border-l-${color} h-full transition-all duration-300 hover:shadow-lg`}>
+      <div className="flex justify-between items-start mb-4">
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${selectedColor.iconBg} shadow-sm`}>
           {icon}
         </div>
-        <div>
-          <p className="text-sm font-medium text-nowrap">{title}</p>
-          <p className="text-2xl font-bold">{value}</p>
-        </div>
+      </div>
+      
+      <div className="mt-2">
+        <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
+        {isLoading ? (
+          <div className="h-8 w-16 bg-slate-200 animate-pulse rounded-md"></div>
+        ) : (
+          <p className={`text-2xl font-bold ${selectedColor.text}`}>{value.toLocaleString()}</p>
+        )}
       </div>
     </div>
   );
