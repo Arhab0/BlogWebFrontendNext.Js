@@ -13,17 +13,37 @@ export default function SideMenuLayout({ children }: DashboardLayoutProps) {
   const [path, setPath] = useState<string[]>([]);
   const [isOpened, setIsOpened] = useState(true);
 
+  // useEffect(() => {
+  //   setPath(pathname.split("/").slice(1));
+
+  //   // Handle initial sidebar state based on screen size
+  //   const handleResize = () => {
+  //     setIsOpened(window.innerWidth >= 768);
+  //   };
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, [pathname]);
+
   useEffect(() => {
     setPath(pathname.split("/").slice(1));
 
-    // Handle initial sidebar state based on screen size
     const handleResize = () => {
       setIsOpened(window.innerWidth >= 768);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, [pathname]);
+
+  useEffect(() => {
+    if (isOpened && window.innerWidth < 768) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isOpened]);
 
   const formatCamelCase = (str: string) => {
     return str.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
@@ -35,7 +55,7 @@ export default function SideMenuLayout({ children }: DashboardLayoutProps) {
       {isOpened && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-30 md:hidden"
-          onClick={() => setIsOpened(false)}
+          // onClick={() => setIsOpened(false)}
         />
       )}
 
