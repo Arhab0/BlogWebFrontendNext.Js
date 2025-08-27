@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUser, FaSignOutAlt, FaBars } from "react-icons/fa";
 import BlogLogo from "../../../../../public/assets/blogLogo.png";
 import Image from "next/image";
@@ -23,6 +23,18 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
+  useEffect(() => {
+    if (menuOpen && window.innerWidth < 768) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [menuOpen]);
+
   function handleLogout() {
     if (helper.getData("RoleId") === "1") {
       localStorage.clear();
@@ -33,9 +45,14 @@ const Header = () => {
     }
   }
   return (
-
     <header className="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
       {/* Logo */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-30 md:hidden"
+          // onClick={() => setIsOpened(false)}
+        />
+      )}
       <div className="flex items-center">
         <Image
           src={BlogLogo}
@@ -55,10 +72,10 @@ const Header = () => {
         {/* Write / Login */}
         <div>
           {helper.getData("token") ? (
-           <button
+            <button
               onClick={() => {
                 router.push("/WritePost/Create");
-                setMenuOpen(false)
+                setMenuOpen(false);
               }}
               className={`relative inline-flex xs:items-center mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
             >
@@ -93,9 +110,7 @@ const Header = () => {
             >
               {helper.getData("ProfilePhoto") ? (
                 <img
-                  src={`${helper.GetUrl()}/${helper.getData(
-                    "ProfilePhoto"
-                  )}`}
+                  src={`${helper.GetUrl()}/${helper.getData("ProfilePhoto")}`}
                   alt="profile"
                   className="w-8 h-8 rounded-full object-cover"
                 />
@@ -174,27 +189,25 @@ const Header = () => {
                 Write
               </button> */}
               <button
-              onClick={() => {
-                router.push("/WritePost/Create");
-                setMenuOpen(false)
-              }}
-              className={`relative inline-flex xs:items-center mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
-            >
-              <span
-                className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+                onClick={() => {
+                  router.push("/WritePost/Create");
+                  setMenuOpen(false);
+                }}
+                className={`relative inline-flex xs:items-center mt-2 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all duration-300`}
               >
-                Write
-              </span>
-            </button>
+                <span
+                  className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white bg-white text-black group-hover:bg-transparent group-hover:text-white`}
+                >
+                  Write
+                </span>
+              </button>
 
               <hr />
 
               <div className="flex items-center gap-3">
                 {helper.getData("ProfilePhoto") ? (
                   <img
-                    src={`${helper.GetUrl()}/${helper.getData(
-                      "ProfilePhoto"
-                    )}`}
+                    src={`${helper.GetUrl()}/${helper.getData("ProfilePhoto")}`}
                     alt="profile"
                     className="w-10 h-10 rounded-full object-cover"
                   />
