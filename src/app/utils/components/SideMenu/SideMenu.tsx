@@ -39,7 +39,7 @@ const SideMenu = ({ isOpened, setIsOpened }: SideMenuProps) => {
     ${
       !isOpened
         ? "hidden md:flex w-[74px]"
-        : "w-[40vw] md:w-[20dvw] xl:w-[15dvw]"
+        : "w-[70vw] md:w-[20dvw] xl:w-[15dvw]"
     }
   `}
     >
