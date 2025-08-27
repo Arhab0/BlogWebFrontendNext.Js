@@ -227,10 +227,10 @@ const page = () => {
                         router.push(`/Post/SinglePost/${post.postId}`)
                       }
                     >
-                      <h2 className="text-2xl md:text-3xl font-bold mb-4 hover:text-blue-600 transition-colors duration-200">
+                      <h2 className="text-2xl md:text-3xl font-bold mb-4 hover:text-blue-600 transition-colors duration-200 text-start">
                         {post.Title}
                       </h2>
-                      <p className="text-base md:text-lg text-gray-700 mb-4">
+                      <p className="text-base md:text-lg text-gray-700 mb-4 text-start">
                         {getText(post.Description).length > 220
                           ? `${getText(post.Description).substring(0, 220)}...`
                           : getText(post.Description)}
