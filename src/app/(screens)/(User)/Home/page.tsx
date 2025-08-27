@@ -173,7 +173,7 @@ const page = () => {
                     } `}
                   >
                     <span
-                      className={`relative px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white ${
+                      className={`relative text-nowrap px-4 py-2 rounded-md w-full transition-all ease-in duration-75 hover:bg-transparent hover:text-white ${
                         cat.value === selectedCategory
                           ? "text-white"
                           : "bg-white text-black"
