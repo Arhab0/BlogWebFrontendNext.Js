@@ -214,7 +214,7 @@ const page = () => {
 
       <div className="text-nowrap">
         <div className="w-full overflow-x-auto bg-white px-4 py-2 mt-2 rounded-md shadow-md">
-          <table className="min-w-full table-auto mt-4 text-sm text-nowrap">
+          <table className="min-w-full table-auto mt-4 text-sm text-nowrap space-y-20">
             <thead>
               <tr>
                 <th className="text-left pr-2 py-1">Name</th>

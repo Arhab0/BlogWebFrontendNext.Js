@@ -249,7 +249,7 @@ const Home = () => {
           <h2 className="text-xl font-semibold text-slate-800 mb-6">
             Recent Activity
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 h-80 overflow-y-auto">
            {logs.map((activity:Logs, index:number) => (
               <div key={index} className="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-50 transition-colors">
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mt-1">
