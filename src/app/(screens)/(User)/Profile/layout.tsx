@@ -92,7 +92,7 @@ export default function SideMenuLayout({ children }: DashboardLayoutProps) {
             </span>
           ))}
         </p>
-        <div className="px-0 md:px-5 flex-1 font-alata py-3">{children}</div>
+        <div className="px-0 md:px-5 flex-1 font-montserrat py-3">{children}</div>
       </div>
     </div>
   );

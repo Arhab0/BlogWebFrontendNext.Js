@@ -142,8 +142,8 @@ const Home = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800">Dashboard Overview</h1>
-            <p className="text-slate-500 mt-2">Monitor your platform activity and metrics</p>
+            <h1 className="text-3xl font-semibold text-slate-800">Dashboard Overview</h1>
+            <p className="text-slate-500 mt-2 text-sm">Monitor your platform activity and metrics</p>
           </div>
           <button 
             onClick={FetchData}
@@ -155,12 +155,12 @@ const Home = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white rounded-xl p-1.5 shadow-sm w-fit mb-8">
+        <div className="flex bg-white rounded-xl p-1.5 justify-around shadow-sm w-1/2 mb-8">
           {["all", "users", "posts"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === tab ? 'bg-blue-500 text-white' : 'text-slate-600 hover:text-slate-800'}`}
+              className={`px-4 py-2 rounded-lg w-full text-sm font-medium transition-all duration-300 ${activeTab === tab ? 'bg-blue-500 text-white' : 'text-slate-600 hover:text-slate-800'}`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>

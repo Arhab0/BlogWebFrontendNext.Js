@@ -48,11 +48,11 @@ const DashboardCard = ({ title, value, icon, color, isLoading = false}: Dashboar
       </div>
       
       <div className="mt-2">
-        <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
+        <p className="text-xs font-medium text-slate-500 mb-1">{title}</p>
         {isLoading ? (
           <div className="h-8 w-16 bg-slate-200 animate-pulse rounded-md"></div>
         ) : (
-          <p className={`text-2xl font-bold ${selectedColor.text}`}>{value.toLocaleString()}</p>
+          <p className={`text-3xl font-bold ${selectedColor.text}`}>{value.toLocaleString()}</p>
         )}
       </div>
     </div>

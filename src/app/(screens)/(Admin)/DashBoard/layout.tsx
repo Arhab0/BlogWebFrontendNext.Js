@@ -59,20 +59,7 @@ export default function SideMenuLayout({ children }: DashboardLayoutProps) {
         className={`w-full flex-1 flex flex-col overflow-y-auto transition-all duration-300 
           ${isOpened ? "md:ml-[1dvw] xl:ml-[1dvw]" : "ml-0 md:ml-[10px]"}`}
       >
-        <p className="px-0 md:px-5 text-xs text-[#575757] mb-1.5 mt-9 ml-4">
-          {path.map((item, index) => (
-            <span
-              key={index}
-              className={
-                index === path.length - 1 ? "font-bold text-black" : ""
-              }
-            >
-              {formatCamelCase(item)}
-              {index !== path.length - 1 && " / "}
-            </span>
-          ))}
-        </p>
-        <div className="px-0 md:px-5 flex-1 font-alata py-3">{children}</div>
+        <div className="px-0 md:px-5 flex-1 font-montserrat py-3">{children}</div>
       </div>
     </div>
   );
