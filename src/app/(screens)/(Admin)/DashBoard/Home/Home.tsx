@@ -12,6 +12,15 @@ import { MdOutlinePending } from "react-icons/md";
 import PostStatusChart from "@/app/utils/components/Chart/PostStatusChart";
 import UserStatusChart from "@/app/utils/components/Chart/UserStatusChart";
 import useHelper from "../../../../../../Helper/helper";
+import moment from "moment";
+
+interface Logs{
+  Title: string,
+  Description:string,
+  Name:string,
+  AddedAt:string,
+  Type:string
+}
 
 const initialCards = [
   {
@@ -84,7 +93,7 @@ const Home = () => {
     PendingPosts: 0,
     ReSubmittedPosts: 0,
   });
-
+  const[logs,setLogs] = useState<Logs[]>([])
   const [cards, setCards] = useState(initialCards);
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -116,17 +125,43 @@ const Home = () => {
     FetchData();
   }, []);
 
+   const renderIcon = (type: string) => {
+    switch (type) {
+      case "Activate":
+        return <FaUserCheck className="text-green-600" />;
+      case "Signup":
+        return <FaUser className="text-blue-600" />;
+      case "Deactivate":
+        return <FaUserSlash className="text-red-600" />;
+      case "Reject":
+        return <TbArticleOff className="text-red-500" />;
+      case "Approved":
+        return <TbArticle className="text-green-500" />;
+      case "Request":
+        return <MdOutlinePending className="text-yellow-500" />;
+      case "ReSubmitted":
+        return <TbRefresh className="text-orange-500" />;
+      default:
+        return <TbArticle className="text-slate-400" />; // fallback
+    }
+  };
+
   function FetchData() {
     setIsLoading(true);
-    helper.xhr
-      .Get("/Admin/Information")
-      .then((res) => {
-        setInfo(res);
-      })
-      .catch((err) => {})
-      .finally(() => {
-        setIsLoading(false);
-      });
+     Promise.all([
+      helper.xhr.Get(
+        "/Admin/Information"
+      ),
+      helper.xhr.Get(
+        "/Admin/GetLogs"
+      ),
+    ])
+    .then(([InfoRes,LogsRes])=>{
+        setInfo(InfoRes)
+        setLogs(LogsRes)
+    })
+    .catch(()=>{})
+    .finally(()=>{setIsLoading(false)})
   }
 
   const filteredCards = cards.filter(card => {
@@ -193,7 +228,7 @@ const Home = () => {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-10">
-          <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
+          <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm p-4 border border-slate-200">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-slate-800">
                 Posts Status Overview
@@ -215,19 +250,16 @@ const Home = () => {
             Recent Activity
           </h2>
           <div className="space-y-4">
-            {[
-              { action: "New user registration", time: "2 minutes ago", user: "John Doe" },
-              { action: "Post approved", time: "15 minutes ago", user: "Jane Smith" },
-              { action: "Post rejected", time: "1 hour ago", user: "Robert Johnson" },
-              { action: "User deactivated", time: "3 hours ago", user: "Sarah Williams" },
-            ].map((activity, index) => (
+           {logs.map((activity:Logs, index:number) => (
               <div key={index} className="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-50 transition-colors">
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mt-1">
-                  {!activity.action.includes("Post") ? <FaUser /> : <TbArticle />}
+                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mt-1">
+                  {renderIcon(activity.Type)}
+                </div>
                 </div>
                 <div className="flex-1">
-                  <p className="text-slate-800 font-medium">{activity.action}</p>
-                  <p className="text-slate-500 text-sm">By {activity.user} · {activity.time}</p>
+                  <p className="text-slate-800 font-medium">{activity.Title}</p>
+                  <p className="text-slate-500 text-xs">{activity.Description} 🔹 {moment(activity.AddedAt).fromNow()}</p>
                 </div>
               </div>
             ))}
