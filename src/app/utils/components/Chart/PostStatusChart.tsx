@@ -28,13 +28,19 @@ const PostStatusChart = ({ data }: { data: any }) => {
     <ResponsiveContainer width="100%" height={250}>
       <BarChart data={chartData} barCategoryGap={30}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis
+          dataKey="name"
+          tickFormatter={(value) =>
+            value === "ReSubmitted Posts" ? "ReSubmitted" : value
+          }
+        />
+
         <YAxis allowDecimals={false} />
         <Tooltip cursor={{ fill: "transparent" }} />
         <Bar
           dataKey="value"
           radius={[4, 4, 0, 0]}
-          barSize={100}
+          barSize={60}
           isAnimationActive={false}
         >
           {chartData.map((entry, index) => (

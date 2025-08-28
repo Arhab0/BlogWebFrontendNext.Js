@@ -24,7 +24,13 @@ const UserStatusChart = ({ data }: { data: any }) => {
     <ResponsiveContainer width="100%" height={250}>
       <BarChart data={chartData} barCategoryGap={30}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        {/* <XAxis dataKey="name" /> */}
+        <XAxis
+          dataKey="name"
+          tickFormatter={(value) =>
+            value === "DeActivated Users" ? "DeActivated" : value
+          }
+        />
         <YAxis allowDecimals={false} />
         <Tooltip cursor={{ fill: "transparent" }} />
         <Bar
