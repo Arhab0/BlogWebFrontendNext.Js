@@ -228,7 +228,7 @@ const Home = () => {
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 mb-10">
-          <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm p-4 border border-slate-200">
+          <div className={`${activeTab == "all" ? "lg:col-span-6" : activeTab == "posts" ? "lg:col-span-10":"hidden"} bg-white rounded-2xl shadow-sm p-4 border border-slate-200`}>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-slate-800">
                 Posts Status Overview
@@ -236,7 +236,7 @@ const Home = () => {
             </div>
             <PostStatusChart data={info} />
           </div>
-          <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
+          <div className={`${activeTab == "all" ? "lg:col-span-4" : activeTab == "users" ? "lg:col-span-10":"hidden"} bg-white rounded-2xl shadow-sm p-6 border border-slate-200`}>
             <h2 className="text-xl font-semibold text-slate-800 mb-6">
               Users Status Overview
             </h2>
