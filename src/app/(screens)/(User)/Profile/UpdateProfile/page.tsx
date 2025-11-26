@@ -688,7 +688,7 @@ const Page = () => {
                     range={50}
                     placeHolder="Enter your password"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-[10px] font-bold text-gray-500 mt-1">
                     Leave blank to keep current password
                   </p>
                 </div>
