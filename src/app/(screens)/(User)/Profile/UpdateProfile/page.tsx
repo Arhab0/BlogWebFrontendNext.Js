@@ -557,7 +557,7 @@ const Page = () => {
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center">
                     {user.ProfilePic !== "" ? (
                       <>
-                        {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                        {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto").substring(0,5) == "https" ? (
                           <img
                             src={helper.getData("ProfilePhoto")}
                             alt="profile"

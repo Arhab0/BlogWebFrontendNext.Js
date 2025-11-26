@@ -243,7 +243,7 @@ const page = () => {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 w-full">
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
                 const idToken = credentialResponse.credential;

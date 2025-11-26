@@ -85,7 +85,7 @@ const MyProfile = () => {
             <div className="flex flex-col md:flex-row items-center gap-5 w-full md:mx-auto">
               {user?.ProfilePic ? (
                 <>
-                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto").substring(0,5) == "https" ? (
                     <img
                       src={helper.getData("ProfilePhoto")}
                       alt="profile"

@@ -110,7 +110,7 @@ const Header = () => {
             >
               {helper.getData("ProfilePhoto") ? (
                 <>
-                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto").substring(0,5) == "https" ? (
                     <img
                       src={helper.getData("ProfilePhoto")}
                       alt="profile"
@@ -219,7 +219,7 @@ const Header = () => {
               <div className="flex items-center gap-3">
                 {helper.getData("ProfilePhoto") ? (
                   <>
-                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto").substring(0,5) == "https" ? (
                     <img
                       src={helper.getData("ProfilePhoto")}
                       alt="profile"
