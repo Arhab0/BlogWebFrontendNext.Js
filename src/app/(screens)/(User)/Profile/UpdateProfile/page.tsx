@@ -505,7 +505,6 @@ const Page = () => {
         )
         .then((res) => {
           // Success handling
-          console.log(res)
           helper.removeData("ProfilePhoto");
           helper.removeData("userName");
           helper.storeData("ProfilePhoto", res.ProfilePic);
