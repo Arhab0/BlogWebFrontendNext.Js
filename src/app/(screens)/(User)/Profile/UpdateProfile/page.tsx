@@ -505,8 +505,8 @@ const Page = () => {
         )
         .then((res) => {
           // Success handling
-          helper.removeData("ProfilePhoto")
-          helper.storeData("ProfilePhoto",res.ProfilePic)
+          helper.removeData("ProfilePhoto");
+          helper.storeData("ProfilePhoto", res.ProfilePic);
           toast.success("User has been updated", {
             position: "top-right",
             autoClose: 5000,
@@ -556,10 +556,23 @@ const Page = () => {
                 <div className="relative mb-4">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center">
                     {user.ProfilePic !== "" ? (
-                      <img
-                        src={`${helper.GetUrl()}/${user.ProfilePic}`}
-                        className="w-full h-full rounded-full object-cover border border-gray-300"
-                      />
+                      <>
+                        {helper.getData("isGoogle") == "true" ? (
+                          <img
+                            src={helper.getData("ProfilePhoto")}
+                            alt="profile"
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={`${helper.GetUrl()}/${helper.getData(
+                              "ProfilePhoto"
+                            )}`}
+                            alt="profile"
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                        )}
+                      </>
                     ) : (
                       <img
                         src={selectedImage || "/default-avatar.png"}

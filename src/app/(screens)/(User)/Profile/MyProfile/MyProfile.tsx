@@ -84,11 +84,23 @@ const MyProfile = () => {
           <div className="px-4 py-6 border-b border-gray-300">
             <div className="flex flex-col md:flex-row items-center gap-5 w-full md:mx-auto">
               {user?.ProfilePic ? (
-                <img
-                  src={`${helper.GetUrl()}/${user?.ProfilePic}`}
-                  className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border border-gray-300"
-                  alt=""
-                />
+                <>
+                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                    <img
+                      src={helper.getData("ProfilePhoto")}
+                      alt="profile"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={`${helper.GetUrl()}/${helper.getData(
+                        "ProfilePhoto"
+                      )}`}
+                      alt="profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  )}
+                </>
               ) : (
                 <FaUser />
               )}

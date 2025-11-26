@@ -6,6 +6,9 @@ import useHelper from "../../../../../../Helper/helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { GoogleLogin } from "@react-oauth/google";
+// import jwt_decode from "jwt-decode";
+
 const page = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -49,7 +52,7 @@ const page = () => {
         })
       )
       .then((res) => {
-        console.log(res)
+        console.log(res);
         if (res.message) {
           setDeActivationReason(res.message);
           setShowRejectModal(true);
@@ -62,6 +65,7 @@ const page = () => {
           helper.storeData("UserId", res.user.Id);
           helper.storeData("RoleId", res.user.RoleId);
           helper.storeData("ProfilePhoto", res.user.ProfilePic);
+          helper.storeData("isGoogle", res.isGoogle);
           if (res.user.RoleId === 1) {
             router.push("/DashBoard");
           } else {
@@ -121,19 +125,19 @@ const page = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-50">
-       <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              style={{zIndex: 99999 }}
-            />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        style={{ zIndex: 99999 }}
+      />
       {/* Left Hero Section */}
       <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 text-white flex-col justify-center items-center p-12">
         <h1 className="text-5xl font-bold mb-6">Welcome Back 👋</h1>
@@ -233,6 +237,44 @@ const page = () => {
             </button>
           </div>
 
+          <div className="flex items-center my-4">
+            <div className="flex-grow border-t border-gray-300"></div>
+            <span className="mx-4 text-gray-500 text-sm">or login with</span>
+            <div className="flex-grow border-t border-gray-300"></div>
+          </div>
+
+          <div className="mt-4">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                const idToken = credentialResponse.credential;
+
+                const res = await helper.xhr.Post(
+                  "/Auth/GoogleLogin",
+                  helper.ConvertToFormData({ idToken })
+                );
+
+                helper.storeData("token", res.token);
+                helper.storeData(
+                  "userName",
+                  res.user.FirstName + " " + res.user.LastName
+                );
+                helper.storeData("email", res.user.Email);
+                helper.storeData("UserId", res.user.Id);
+                helper.storeData("RoleId", res.user.RoleId);
+                helper.storeData("ProfilePhoto", res.user.ProfilePic);
+                helper.storeData("isGoogle", res.isGoogle);
+
+                if (res.user.RoleId === 1) {
+                  router.push("/DashBoard");
+                } else {
+                  router.push("/Home");
+                }
+              }}
+              onError={() => {
+                toast.error("Google Authentication Failed!");
+              }}
+            />
+          </div>
           {/* Register Link */}
           <p className="text-sm text-gray-500 text-center mt-6">
             Don’t have an account?{" "}

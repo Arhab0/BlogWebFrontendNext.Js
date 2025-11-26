@@ -109,11 +109,23 @@ const Header = () => {
               className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-3 py-2 rounded-md"
             >
               {helper.getData("ProfilePhoto") ? (
-                <img
-                  src={`${helper.GetUrl()}/${helper.getData("ProfilePhoto")}`}
-                  alt="profile"
-                  className="w-8 h-8 rounded-full object-cover"
-                />
+                <>
+                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                    <img
+                      src={helper.getData("ProfilePhoto")}
+                      alt="profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={`${helper.GetUrl()}/${helper.getData(
+                        "ProfilePhoto"
+                      )}`}
+                      alt="profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  )}
+                </>
               ) : (
                 <FaUser className="text-gray-600" />
               )}
@@ -206,11 +218,23 @@ const Header = () => {
 
               <div className="flex items-center gap-3">
                 {helper.getData("ProfilePhoto") ? (
-                  <img
-                    src={`${helper.GetUrl()}/${helper.getData("ProfilePhoto")}`}
-                    alt="profile"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
+                  <>
+                  {helper.getData("isGoogle") == "true" && helper.getData("ProfilePhoto") == "https" ? (
+                    <img
+                      src={helper.getData("ProfilePhoto")}
+                      alt="profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={`${helper.GetUrl()}/${helper.getData(
+                        "ProfilePhoto"
+                      )}`}
+                      alt="profile"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  )}
+                </>
                 ) : (
                   <FaUser className="text-lg text-gray-600" />
                 )}
