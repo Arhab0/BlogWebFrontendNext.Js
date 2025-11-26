@@ -506,7 +506,12 @@ const Page = () => {
         .then((res) => {
           // Success handling
           helper.removeData("ProfilePhoto");
+          helper.removeData("userName");
           helper.storeData("ProfilePhoto", res.ProfilePic);
+          helper.storeData(
+                  "userName",
+                  res.user.FirstName + " " + res.user.LastName
+                );
           toast.success("User has been updated", {
             position: "top-right",
             autoClose: 5000,
