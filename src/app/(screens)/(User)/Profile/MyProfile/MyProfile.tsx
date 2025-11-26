@@ -89,7 +89,7 @@ const MyProfile = () => {
                     <img
                       src={helper.getData("ProfilePhoto")}
                       alt="profile"
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-16 h-16 rounded-full object-cover"
                     />
                   ) : (
                     <img
@@ -97,7 +97,7 @@ const MyProfile = () => {
                         "ProfilePhoto"
                       )}`}
                       alt="profile"
-                      className="w-8 h-8 rounded-full object-cover"
+                      className="w-16 h-16 rounded-full object-cover"
                     />
                   )}
                 </>

@@ -561,7 +561,7 @@ const Page = () => {
                           <img
                             src={helper.getData("ProfilePhoto")}
                             alt="profile"
-                            className="w-12 h-12 rounded-full object-cover"
+                            className="w-32 h-32 rounded-full object-cover"
                           />
                         ) : (
                           <img
@@ -569,7 +569,7 @@ const Page = () => {
                               "ProfilePhoto"
                             )}`}
                             alt="profile"
-                            className="w-8 h-8 rounded-full object-cover"
+                            className="w-32 h-32 rounded-full object-cover"
                           />
                         )}
                       </>
